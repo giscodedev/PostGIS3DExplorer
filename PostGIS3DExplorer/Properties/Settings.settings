@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PostGIS3DExplorer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LoginName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">postgres</Value>
+    </Setting>
+    <Setting Name="LoginPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">postgres</Value>
+    </Setting>
+    <Setting Name="LoginServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="LoginPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">5432</Value>
+    </Setting>
+    <Setting Name="LoginDatabase" Type="System.String" Scope="User">
+      <Value Profile="(Default)">postgis</Value>
+    </Setting>
+    <Setting Name="LastProjectFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UpdateRequired" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
