@@ -162,5 +162,8 @@
     <Content Include="postgis3dexplorer.ico" />
     <None Include="Resources\ic_folder_open_black_24dp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Screenshots\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
