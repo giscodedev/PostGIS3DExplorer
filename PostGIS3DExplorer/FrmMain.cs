@@ -80,6 +80,8 @@ namespace PostGIS3DExplorer
         pProjectSerializer.SaveToFile(m_sProjectFileName);
       }
       this.Text = GenerateCaption();
+      this.Refresh();
+      Application.DoEvents();
     }
 
     private void rbtnSaveAs_Click(object sender, EventArgs e)
@@ -100,6 +102,8 @@ namespace PostGIS3DExplorer
         pProjectSerializer.SaveToFile(m_sProjectFileName);
       }
       this.Text = GenerateCaption();
+      this.Refresh();
+      Application.DoEvents();
     }
 
     private void rbtnLoad_Click(object sender, EventArgs e)
