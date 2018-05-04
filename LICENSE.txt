@@ -3,7 +3,7 @@ BSD 3-Clause License
 Copyright (c) 2018, Geon bv
 All rights reserved.
 
-PostGIS3DExplorer has dependencies on other libraries which may have other licences.
+PostGIS3DExplorer has dependencies on other libraries and pieces of code which may have other licences.
 Libraries are as follows:
 
 ActiVIZ Kitware - https://www.kitware.eu/product/activiz -- BSD license
@@ -11,6 +11,7 @@ FastColoredTextBox - https://github.com/PavelTorgashov/FastColoredTextBox -- GNU
 MaterialSkik - https://github.com/IgnaceMaes/MaterialSkin -- MIT license
 NpgSQL - https://github.com/npgsql/npgsql -- https://github.com/npgsql/npgsql/blob/dev/LICENSE.txt
 RibbonWinForms - https://github.com/RibbonWinForms/RibbonWinForms -- Microsoft Public License (Ms-PL)
+TreeView-Rearrange - https://www.codeproject.com/Articles/6184/TreeView-Rearrange - Free(?)
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
