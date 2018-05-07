@@ -42,10 +42,19 @@
       this.rbtnSaveAs = new System.Windows.Forms.RibbonButton();
       this.rbtnLoad = new System.Windows.Forms.RibbonButton();
       this.ribbonSeparator1 = new System.Windows.Forms.RibbonSeparator();
-      this.rbnClearAll = new System.Windows.Forms.RibbonButton();
+      this.rbtnExecuteQuery = new System.Windows.Forms.RibbonButton();
+      this.rbtnRemoveQuery = new System.Windows.Forms.RibbonButton();
+      this.rbnRemoveAllQueries = new System.Windows.Forms.RibbonButton();
       this.ribbonPanel1 = new System.Windows.Forms.RibbonPanel();
       this.rbnAddConnection = new System.Windows.Forms.RibbonButton();
       this.rbnAddQuery = new System.Windows.Forms.RibbonButton();
+      this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
+      this.rbtnZoomFull = new System.Windows.Forms.RibbonButton();
+      this.ribbonPanel3 = new System.Windows.Forms.RibbonPanel();
+      this.rbtnDemoData = new System.Windows.Forms.RibbonButton();
+      this.rbtnDemoProject = new System.Windows.Forms.RibbonButton();
+      this.rbtnLoadDemoProject1 = new System.Windows.Forms.RibbonButton();
+      this.rbtnLoadDemoProject2 = new System.Windows.Forms.RibbonButton();
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
       this.mainControlsPanel = new System.Windows.Forms.Panel();
@@ -86,9 +95,8 @@
       // 
       this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
       this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-      this.imageList1.Images.SetKeyName(0, "connection");
-      this.imageList1.Images.SetKeyName(1, "sql_old");
-      this.imageList1.Images.SetKeyName(2, "sql");
+      this.imageList1.Images.SetKeyName(0, "sql");
+      this.imageList1.Images.SetKeyName(1, "connection");
       // 
       // splitContainer1
       // 
@@ -168,6 +176,8 @@
       // 
       this.ribbonTab1.Panels.Add(this.ribbonPanel2);
       this.ribbonTab1.Panels.Add(this.ribbonPanel1);
+      this.ribbonTab1.Panels.Add(this.ribbonPanel4);
+      this.ribbonTab1.Panels.Add(this.ribbonPanel3);
       this.ribbonTab1.Text = "Start";
       // 
       // ribbonPanel2
@@ -176,7 +186,9 @@
       this.ribbonPanel2.Items.Add(this.rbtnSaveAs);
       this.ribbonPanel2.Items.Add(this.rbtnLoad);
       this.ribbonPanel2.Items.Add(this.ribbonSeparator1);
-      this.ribbonPanel2.Items.Add(this.rbnClearAll);
+      this.ribbonPanel2.Items.Add(this.rbtnExecuteQuery);
+      this.ribbonPanel2.Items.Add(this.rbtnRemoveQuery);
+      this.ribbonPanel2.Items.Add(this.rbnRemoveAllQueries);
       this.ribbonPanel2.Text = "Project";
       // 
       // rbtnSave
@@ -203,13 +215,29 @@
       this.rbtnLoad.Text = "Laden";
       this.rbtnLoad.Click += new System.EventHandler(this.rbtnLoad_Click);
       // 
-      // rbnClearAll
+      // rbtnExecuteQuery
       // 
-      this.rbnClearAll.Image = ((System.Drawing.Image)(resources.GetObject("rbnClearAll.Image")));
-      this.rbnClearAll.MinimumSize = new System.Drawing.Size(95, 0);
-      this.rbnClearAll.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbnClearAll.SmallImage")));
-      this.rbnClearAll.Text = "Alles wissen";
-      this.rbnClearAll.Click += new System.EventHandler(this.rbnClearAll_Click);
+      this.rbtnExecuteQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbtnExecuteQuery.Image")));
+      this.rbtnExecuteQuery.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnExecuteQuery.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnExecuteQuery.SmallImage")));
+      this.rbtnExecuteQuery.Text = "Uitvoeren";
+      this.rbtnExecuteQuery.Click += new System.EventHandler(this.rbtnExecuteQuery_Click);
+      // 
+      // rbtnRemoveQuery
+      // 
+      this.rbtnRemoveQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveQuery.Image")));
+      this.rbtnRemoveQuery.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnRemoveQuery.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveQuery.SmallImage")));
+      this.rbtnRemoveQuery.Text = "Wissen";
+      this.rbtnRemoveQuery.Click += new System.EventHandler(this.rbtnRemoveQuery_Click);
+      // 
+      // rbnRemoveAllQueries
+      // 
+      this.rbnRemoveAllQueries.Image = ((System.Drawing.Image)(resources.GetObject("rbnRemoveAllQueries.Image")));
+      this.rbnRemoveAllQueries.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbnRemoveAllQueries.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbnRemoveAllQueries.SmallImage")));
+      this.rbnRemoveAllQueries.Text = "Alles wissen";
+      this.rbnRemoveAllQueries.Click += new System.EventHandler(this.RemoveAllQueries_Click);
       // 
       // ribbonPanel1
       // 
@@ -234,6 +262,61 @@
       this.rbnAddQuery.Text = "+ Query";
       this.rbnAddQuery.Click += new System.EventHandler(this.rbnAddQuery_Click);
       // 
+      // ribbonPanel4
+      // 
+      this.ribbonPanel4.Items.Add(this.rbtnZoomFull);
+      this.ribbonPanel4.Text = "3D";
+      // 
+      // rbtnZoomFull
+      // 
+      this.rbtnZoomFull.Image = ((System.Drawing.Image)(resources.GetObject("rbtnZoomFull.Image")));
+      this.rbtnZoomFull.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnZoomFull.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnZoomFull.SmallImage")));
+      this.rbtnZoomFull.Text = "Uitzoomen";
+      this.rbtnZoomFull.Click += new System.EventHandler(this.rbtnZoomFull_Click);
+      // 
+      // ribbonPanel3
+      // 
+      this.ribbonPanel3.Items.Add(this.rbtnDemoData);
+      this.ribbonPanel3.Items.Add(this.rbtnDemoProject);
+      this.ribbonPanel3.Text = "Demo";
+      // 
+      // rbtnDemoData
+      // 
+      this.rbtnDemoData.Enabled = false;
+      this.rbtnDemoData.Image = ((System.Drawing.Image)(resources.GetObject("rbtnDemoData.Image")));
+      this.rbtnDemoData.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnDemoData.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnDemoData.SmallImage")));
+      this.rbtnDemoData.Text = "Demo data";
+      this.rbtnDemoData.ToolTip = "Demo data laden";
+      this.rbtnDemoData.Click += new System.EventHandler(this.rbtnDemoData_Click);
+      // 
+      // rbtnDemoProject
+      // 
+      this.rbtnDemoProject.DropDownItems.Add(this.rbtnLoadDemoProject1);
+      this.rbtnDemoProject.DropDownItems.Add(this.rbtnLoadDemoProject2);
+      this.rbtnDemoProject.Image = ((System.Drawing.Image)(resources.GetObject("rbtnDemoProject.Image")));
+      this.rbtnDemoProject.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnDemoProject.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnDemoProject.SmallImage")));
+      this.rbtnDemoProject.Style = System.Windows.Forms.RibbonButtonStyle.DropDown;
+      this.rbtnDemoProject.Text = "Demo project";
+      // 
+      // rbtnLoadDemoProject1
+      // 
+      this.rbtnLoadDemoProject1.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+      this.rbtnLoadDemoProject1.Image = ((System.Drawing.Image)(resources.GetObject("rbtnLoadDemoProject1.Image")));
+      this.rbtnLoadDemoProject1.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnLoadDemoProject1.SmallImage")));
+      this.rbtnLoadDemoProject1.Text = "Demo project 1 - basisvormen";
+      this.rbtnLoadDemoProject1.Click += new System.EventHandler(this.rbtnLoadDemoProject1_Click);
+      // 
+      // rbtnLoadDemoProject2
+      // 
+      this.rbtnLoadDemoProject2.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+      this.rbtnLoadDemoProject2.Image = ((System.Drawing.Image)(resources.GetObject("rbtnLoadDemoProject2.Image")));
+      this.rbtnLoadDemoProject2.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnLoadDemoProject2.SmallImage")));
+      this.rbtnLoadDemoProject2.Text = "Demo project 2 - AHN en BAG";
+      this.rbtnLoadDemoProject2.Click += new System.EventHandler(this.rbtnLoadDemoProject2_Click);
+      // 
       // openFileDialog1
       // 
       this.openFileDialog1.FileName = "openFileDialog1";
@@ -252,6 +335,7 @@
       // 
       // advancedTreeView1
       // 
+      this.advancedTreeView1.AllowDrop = true;
       this.advancedTreeView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.advancedTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.advancedTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
@@ -306,13 +390,22 @@
     private System.Windows.Forms.ImageList imageList1;
     private System.Windows.Forms.Panel mainControlsPanel;
     private System.Windows.Forms.Panel SqlContainerPanel;
-    private System.Windows.Forms.RibbonButton rbnClearAll;
+    private System.Windows.Forms.RibbonButton rbnRemoveAllQueries;
     private System.Windows.Forms.RibbonButton rbnAddQuery;
     private System.Windows.Forms.RibbonSeparator ribbonSeparator1;
     private System.Windows.Forms.RibbonPanel ribbonPanel2;
     private System.Windows.Forms.RibbonButton rbtnSave;
     private System.Windows.Forms.RibbonButton rbtnLoad;
     private System.Windows.Forms.RibbonButton rbtnSaveAs;
+    private System.Windows.Forms.RibbonPanel ribbonPanel3;
+    private System.Windows.Forms.RibbonButton rbtnDemoData;
+    private System.Windows.Forms.RibbonButton rbtnDemoProject;
+    private System.Windows.Forms.RibbonButton rbtnLoadDemoProject1;
+    private System.Windows.Forms.RibbonButton rbtnLoadDemoProject2;
+    private System.Windows.Forms.RibbonPanel ribbonPanel4;
+    private System.Windows.Forms.RibbonButton rbtnZoomFull;
+    private System.Windows.Forms.RibbonButton rbtnExecuteQuery;
+    private System.Windows.Forms.RibbonButton rbtnRemoveQuery;
   }
 }
 

@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Connections>
+    <Connection>
+      <Queries>
+        <Query>
+          <Name>Pand - DEM</Name>
+          <SQL>select &#xD;
+  st_AsText(   (st_dump(ST_DelaunayTriangles(st_collect( m.geom ), 0.5))).geom   )&#xD;
+from &#xD;
+  pand p,&#xD;
+  ahn_sample m&#xD;
+where &#xD;
+  p.geom &amp;&amp; m.geom&#xD;
+and&#xD;
+  st_intersects(p.geom, m.geom)&#xD;
+and&#xD;
+  identificatie = '1722100000003767'&#xD;
+and&#xD;
+  classificatie = 6</SQL>
+          <FillColor>Yellow</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Pand - LIDAR</Name>
+          <SQL>select &#xD;
+  st_AsText(m.geom)&#xD;
+from &#xD;
+  pand p,&#xD;
+  ahn_sample m&#xD;
+where &#xD;
+  p.geom &amp;&amp; m.geom&#xD;
+and&#xD;
+  st_intersects(p.geom, m.geom)&#xD;
+and&#xD;
+  identificatie = '1722100000003767'&#xD;
+and&#xD;
+  classificatie = 6</SQL>
+          <FillColor>Red</FillColor>
+          <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Pand - Extrude 3D</Name>
+          <SQL>select &#xD;
+  st_astext&#xD;
+  (&#xD;
+    st_translate&#xD;
+    (&#xD;
+      (st_dump(&#xD;
+      st_tesselate(st_extrude(st_simplify(geom, 0.1), 0::float, 0::float, 5.5::float))&#xD;
+      )).geom,     &#xD;
+      0,&#xD;
+      0,&#xD;
+      (&#xD;
+        select &#xD;
+          (avg(st_z(m.geom)))::float&#xD;
+        from &#xD;
+          pand p,&#xD;
+          ahn_sample m&#xD;
+        where &#xD;
+          p.geom &amp;&amp; m.geom&#xD;
+        and&#xD;
+          st_intersects(st_buffer(p.geom, 2), m.geom)&#xD;
+        and&#xD;
+          identificatie = '1722100000003767' &#xD;
+        and&#xD;
+          classificatie = 2 limit 1&#xD;
+      )&#xD;
+    )&#xD;
+  )&#xD;
+from&#xD;
+  pand&#xD;
+where &#xD;
+  identificatie = '1722100000003767'</SQL>
+          <FillColor>Yellow</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Totaal - DEM maaiveld</Name>
+          <SQL>select  &#xD;
+  st_AsText(   (st_dump(ST_DelaunayTriangles(st_collect( geom ), 5))).geom   )&#xD;
+from &#xD;
+  ahn_sample&#xD;
+where &#xD;
+  classificatie = 2&#xD;
+</SQL>
+          <FillColor>#FF8040</FillColor>
+          <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Totaal - LIDAR Panden</Name>
+          <SQL>select  &#xD;
+  st_AsText(geom)&#xD;
+from &#xD;
+  ahn_sample&#xD;
+where &#xD;
+  classificatie = 6</SQL>
+          <FillColor>Blue</FillColor>
+          <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Totaal - LIDAR Groen</Name>
+          <SQL>select  &#xD;
+  st_AsText(geom)&#xD;
+from &#xD;
+  ahn_sample&#xD;
+where &#xD;
+  classificatie = 1</SQL>
+          <FillColor>Green</FillColor>
+          <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Totaal - LIDAR Maaiveld</Name>
+          <SQL>select  &#xD;
+  st_AsText(geom)&#xD;
+from &#xD;
+  ahn_sample&#xD;
+where &#xD;
+  classificatie = 2</SQL>
+          <FillColor>#0080C0</FillColor>
+          <Outline>false</Outline>
+        </Query>
+      </Queries>
+      <PostGISConnection>
+        <Name>Localhost</Name>
+        <Host>localhost</Host>
+        <Database>postgis</Database>
+        <Port>5432</Port>
+        <Schema>wozbag</Schema>
+        <User_id>postgres</User_id>
+        <Password>postgres</Password>
+      </PostGISConnection>
+    </Connection>
+  </Connections>
+</Project>

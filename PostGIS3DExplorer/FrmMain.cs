@@ -5,6 +5,7 @@ using MaterialSkin.Controls;
 using Kitware.VTK;
 using System.IO;
 using System.Reflection;
+using Npgsql;
 
 namespace PostGIS3DExplorer
 {
@@ -63,7 +64,17 @@ namespace PostGIS3DExplorer
       sReturn = pAssemblyName.Name + " " + pVersion.Major + "." + pVersion.Minor + "." + pVersion.Build; ;
       if (m_sProjectFileName != "")
       {
-        sReturn += " - " + m_sProjectFileName;
+        const int MAX_WIDTH = 50;
+
+        int i = m_sProjectFileName.LastIndexOf('\\');
+
+        string tokenRight = m_sProjectFileName.Substring(i, m_sProjectFileName.Length - i);
+        string tokenCenter = @"\...";
+        string tokenLeft = m_sProjectFileName.Substring(0, MAX_WIDTH - (tokenRight.Length + tokenCenter.Length));
+
+        string shortFileName = tokenLeft + tokenCenter + tokenRight;
+
+        sReturn += " - " + shortFileName;
       }
       return sReturn;
     }
@@ -151,16 +162,22 @@ namespace PostGIS3DExplorer
 
       // Anti-alias?
       //http://vtk.1045678.n5.nabble.com/Anti-Aliasing-td5597149.html
+
       renWin.LineSmoothingOn();
       renWin.SetLineSmoothing(1);
+
       renWin.PolygonSmoothingOn();
       renWin.SetPolygonSmoothing(1);
+
       renWin.PointSmoothingOn();
+      renWin.SetPointSmoothing(1);
+
       renWin.SetMultiSamples(1);
 
       // Anti-alias (slow but should always work)
       // Too slow without OpenGL...
-      renWin.SetAAFrames(3);
+      //renWin.SetAAFrames(3);
+      renWin.SetAAFrames(5);
     }
 
     private void Clear3DView()
@@ -214,15 +231,19 @@ namespace PostGIS3DExplorer
 
     private void advancedTreeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
     {
+      rbtnDemoData.Enabled = false;
+
       if (e.Node is ConnectionTreeNode)
       {
         ConnectionTreeNode pConnectionTreeNode = e.Node as ConnectionTreeNode;
+        rbtnDemoData.Enabled = true;
       }
       else if (e.Node is SQLTreeNode)
       {
         SQLTreeNode pSQLTreeNode = e.Node as SQLTreeNode;
         SqlContainerPanel.Controls.Clear();
         SqlContainerPanel.Controls.Add(pSQLTreeNode.SQLEditorControl);
+        rbtnDemoData.Enabled = true;
       }
     }
 
@@ -238,11 +259,10 @@ namespace PostGIS3DExplorer
       }
     }
 
-    private void rbnAddQuery_Click(object sender, EventArgs e)
+    private ConnectionTreeNode GetConnectionTreeNode()
     {
-      #region Determine connection node (if present)
       ConnectionTreeNode pConnectionTreeNode = null;
-      if (advancedTreeView1.SelectedNode is ConnectionTreeNode) 
+      if (advancedTreeView1.SelectedNode is ConnectionTreeNode)
       {
         pConnectionTreeNode = advancedTreeView1.SelectedNode as ConnectionTreeNode;
       }
@@ -250,7 +270,12 @@ namespace PostGIS3DExplorer
       {
         pConnectionTreeNode = advancedTreeView1.SelectedNode.Parent as ConnectionTreeNode;
       }
-      #endregion
+      return pConnectionTreeNode;
+    }
+
+    private void rbnAddQuery_Click(object sender, EventArgs e)
+    {
+      ConnectionTreeNode pConnectionTreeNode = this.GetConnectionTreeNode();
 
       if (pConnectionTreeNode != null)
       {
@@ -262,7 +287,7 @@ namespace PostGIS3DExplorer
       }
     }
 
-    private void rbnClearAll_Click(object sender, EventArgs e)
+    private void RemoveAllQueries_Click(object sender, EventArgs e)
     {
       if (MaterialMessageBox.Show(this, "Alles wissen en opnieuw beginnen?", "Vraag", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
@@ -292,9 +317,151 @@ namespace PostGIS3DExplorer
       {
         (e.Node as SQLTreeNode).Naam = e.Label;
       }
+      if (e.Node is ConnectionTreeNode)
+      {
+        (e.Node as ConnectionTreeNode).PostGISConnectionParams.Name = e.Label;
+      }
 
     }
 
+    private void rbtnExecuteQuery_Click(object sender, EventArgs e)
+    {
+      // Get active SQLTreeNode
+      if (advancedTreeView1.SelectedNode is SQLTreeNode)
+      {
+        (advancedTreeView1.SelectedNode as SQLTreeNode).Execute();
+      }
+    }
+
+    private void rbtnRemoveQuery_Click(object sender, EventArgs e)
+    {
+      // Get active SQLTreeNode
+      if (advancedTreeView1.SelectedNode is SQLTreeNode)
+      {
+        (advancedTreeView1.SelectedNode as SQLTreeNode).RemoveWithCleanup();
+      }
+      if (advancedTreeView1.SelectedNode is ConnectionTreeNode)
+      {
+        if (MaterialMessageBox.Show(this, "Complete connectie en bijbehorende vragen wissen?", "Vraag", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+        {
+          ConnectionTreeNode pConnectionTreeNode = advancedTreeView1.SelectedNode as ConnectionTreeNode;
+          for (int iQuery = pConnectionTreeNode.Nodes.Count - 1; iQuery >= 0; iQuery--)
+          {
+            TreeNode pSubNode = pConnectionTreeNode.Nodes[iQuery];
+            if (pSubNode is SQLTreeNode)
+            {
+              SQLTreeNode pSQLTreeNode = pSubNode as SQLTreeNode;
+              pSQLTreeNode.Cleanup();
+            }
+            pConnectionTreeNode.Nodes.Remove(pSubNode);
+          }
+          pConnectionTreeNode.Remove();
+        }
+      }
+    }
+
+    /// <summary>
+    /// Laad een demo dataset
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void rbtnDemoData_Click(object sender, EventArgs e)
+    {
+      if (MaterialMessageBox.Show(this, "Wil je de demo dataset laden in de huidige connectie?\n\nTabellen:\npublic.pand\npublic.ahn_sample\n\nLet op: eventuele bestaande tabellen worden overschreven!", "Demodata laden", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)==DialogResult.OK)
+      {
+        ConnectionTreeNode pConnectionTreeNode = this.GetConnectionTreeNode();
+
+        if (pConnectionTreeNode != null)
+        {
+          NpgsqlConnection pNpgsqlConnection = null;
+          try
+          {
+            pNpgsqlConnection = pConnectionTreeNode.PostGISConnectionParams.GetConnection(true);
+
+            string sDemoDataPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName + "\\Demodata").Replace('\\', '/');
+            string sDemoDataSql = Path.Combine(sDemoDataPath, "demodata.sql");
+            string sSQL = File.ReadAllText(sDemoDataSql).Replace("[demodatapath]", sDemoDataPath);
+            Console.WriteLine(sSQL);
+
+            NpgsqlCommand pNpgsqlCommand = new NpgsqlCommand(sSQL, pNpgsqlConnection);
+            pNpgsqlCommand.ExecuteScalar();
+
+            MaterialMessageBox.Show(this, "Demo dataset is geladen.", "Demodata laden", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+          }
+          catch (Exception ex)
+          {
+            MaterialMessageBox.Show(this, "Er ging iets mis tijdens het laden!\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          }
+          finally
+          {
+            if (pNpgsqlConnection != null)
+            {
+              if (pNpgsqlConnection.State != System.Data.ConnectionState.Closed)
+              {
+                pNpgsqlConnection.Close();
+              }
+            }
+          }
+        }
+
+      }
+    }
+
+    private void rbtnLoadDemoProject1_Click(object sender, EventArgs e)
+    {
+
+      string sDemoDataPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName + "\\Demodata");
+      if (System.Diagnostics.Debugger.IsAttached)
+      {
+        // Read file in Project folder
+        sDemoDataPath = sDemoDataPath + "\\..\\..\\..\\Demodata";
+      }
+      string sDemoProject = Path.Combine(sDemoDataPath, "Demo project 1 - Basisvormen.xml");
+
+      LoadProject(sDemoProject);
+
+      MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+    }
+
+    private void rbtnLoadDemoProject2_Click(object sender, EventArgs e)
+    {
+      string sDemoDataPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName + "\\Demodata");
+      if (System.Diagnostics.Debugger.IsAttached)
+      {
+        // Read file in Project folder
+        sDemoDataPath = sDemoDataPath + "\\..\\..\\..\\Demodata";
+      }
+      string sDemoProject = Path.Combine(sDemoDataPath, "Demo project 2 - AHN en BAG.xml");
+
+      LoadProject(sDemoProject);
+
+      MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+    }
+
+    private void rbtnZoomFull_Click(object sender, EventArgs e)
+    {
+      vtkRenderer pvtkRenderer = null;
+      vtkRenderWindow pvtkRenderWindow = null;
+      pvtkRenderer = this.renderWindowControl1.RenderWindow.GetRenderers().GetFirstRenderer();
+      pvtkRenderWindow = this.renderWindowControl1.RenderWindow;
+
+      // Setup Camera etc.
+      pvtkRenderer.ResetCamera();
+      pvtkRenderer.SetAmbient(1, 1, 1);
+      pvtkRenderer.LightFollowCameraOn();
+
+      //renWin.Render();
+      vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+      pvtkCamera.Zoom(1.0D);
+      pvtkRenderer.LightFollowCameraOn();
+      pvtkRenderer.SetLightFollowCamera(1);
+
+      pvtkRenderWindow.Render();
+
+    }
 
 
   }

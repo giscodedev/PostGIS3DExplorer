@@ -17,15 +17,25 @@ namespace System.Windows.Forms
     private PostGISConnectionParams m_pPostGISConnectionParams = new PostGISConnectionParams();
     public PostGISConnectionParams PostGISConnectionParams
     {
-      get { return m_pPostGISConnectionParams; }
+      get
+      {
+        return m_pPostGISConnectionParams;
+      }
+      set
+      {
+        m_pPostGISConnectionParams = value;
+      }
     }
 
     public ConnectionTreeNode(PostGISConnectionParams pPostGISConnectionParams) : base()
     {
       m_pPostGISConnectionParams = pPostGISConnectionParams;
 
-      this.ImageKey = "connection";
-      this.SelectedImageKey = "connection";
+      //this.ImageKey = "connection";
+      //this.SelectedImageKey = "connection";
+      this.ImageIndex = 1;
+      this.SelectedImageIndex = 1;
+
       this.Text = m_pPostGISConnectionParams.Name;
 
       TreeNodeContextMenu cms = new TreeNodeContextMenu();
@@ -38,6 +48,16 @@ namespace System.Windows.Forms
     {
       switch (toolStripItemClickedEventArgs.ClickedItem.Text)
       {
+        case "Verbinding":
+          FrmConnection pFrmConnection = new FrmConnection();
+          pFrmConnection.PostGISConnectionParams = this.PostGISConnectionParams;
+          if (pFrmConnection.ShowDialog() == DialogResult.OK)
+          {
+            PostGISConnectionParams pPostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
+            this.PostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
+            this.Text = this.PostGISConnectionParams.Name;
+          }
+          break;
         case "Verwijderen":
           this.Remove();
           break;
@@ -55,10 +75,11 @@ namespace System.Windows.Forms
 
     private class TreeNodeContextMenu : MaterialContextMenuStrip
     {
+      public readonly ToolStripItem Properties = new MaterialToolStripMenuItem { Text = "Verbinding" };
       public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = "Verwijderen" };
       public TreeNodeContextMenu()
       {
-        Items.AddRange(new[] { Remove });
+        Items.AddRange(new[] { Properties, Remove });
       }
     }
   }

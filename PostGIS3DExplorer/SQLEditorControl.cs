@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using Kitware.VTK;
 using System.Globalization;
+using MaterialSkin.Controls;
 
 namespace PostGIS3DExplorer
 {
@@ -69,139 +70,160 @@ namespace PostGIS3DExplorer
 
       DBHelper pDBHelper = new DBHelper(m_pPostGISConnectionParams);
 
-      DataTable p3DDataTable = pDBHelper.GetDataTable(sSQL, "3D_objects", false);
-      string sLine = "";
-
-      int iRow = 0;
-      foreach (DataRow pRow in p3DDataTable.Rows)
+      try
       {
-        sLine = pRow[0].ToString();
-        if (sLine.StartsWith("POLYGON Z") || sLine.StartsWith("TRIANGLE Z"))
-        {
-          if (pvtkAppendPolyData == null)
-          {
-            pvtkAppendPolyData = vtkAppendPolyData.New();
-          }
-          sLine = sLine.Replace("TRIANGLE Z ((", "");
-          sLine = sLine.Replace("POLYGON Z ((", "");
-          sLine = sLine.Replace("))", "");
-          sLine = sLine.Replace("),(", "");
 
-          pvtkPoints = vtkPoints.New();
-          pPolygonCell = vtkPolygon.New();
+        DataTable p3DDataTable = pDBHelper.GetDataTable(sSQL, "3D_objects", false);
+        string sLine = "";
+
+        int iRow = 0;
+        foreach (DataRow pRow in p3DDataTable.Rows)
+        {
+          sLine = pRow[0].ToString();
+          if (sLine.StartsWith("POLYGON Z") || sLine.StartsWith("TRIANGLE Z"))
+          {
+            if (pvtkAppendPolyData == null)
+            {
+              pvtkAppendPolyData = vtkAppendPolyData.New();
+            }
+            sLine = sLine.Replace("TRIANGLE Z ((", "");
+            sLine = sLine.Replace("POLYGON Z ((", "");
+            sLine = sLine.Replace("))", "");
+            sLine = sLine.Replace("),(", "");
+
+            pvtkPoints = vtkPoints.New();
+            pPolygonCell = vtkPolygon.New();
+            try
+            {
+              string[] sCoOrdinates = sLine.Split(',');
+              for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+              {
+                string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
+                if (sOrdinates.Length == 3) // Expect x,y,z
+                {
+                  double x = double.Parse(sOrdinates[0], pEnUs);
+                  double y = double.Parse(sOrdinates[1], pEnUs);
+                  double z = double.Parse(sOrdinates[2], pEnUs);
+                  pvtkPoints.InsertNextPoint(x, y, z);
+                }
+                pPolygonCell.GetPointIds().InsertId(iPoint, iPoint);
+              }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            vtkCellArray pCellArray = vtkCellArray.New();
+            pCellArray.InsertNextCell(pPolygonCell);
+
+            vtkPolyData pPolyData = vtkPolyData.New();
+            pPolyData.SetPoints(pvtkPoints);
+            pPolyData.SetPolys(pCellArray);
+
+            pvtkAppendPolyData.AddInput(pPolyData);
+          }
+          else if (sLine.StartsWith("POINT Z"))
+          {
+            if (pvtkCellArray == null)
+            {
+              pvtkCellArray = vtkCellArray.New();
+              pvtkPoints = vtkPoints.New();
+            }
+
+            sLine = sLine.Replace("POINT Z (", "");
+            sLine = sLine.Replace(")", "");
+
+            string[] sOrdinates = sLine.Split(' ');
+
+            double x = double.Parse(sOrdinates[0], pEnUs);
+            double y = double.Parse(sOrdinates[1], pEnUs);
+            double z = double.Parse(sOrdinates[2], pEnUs);
+            int iPnt = pvtkPoints.InsertNextPoint(x, y, z);
+
+            pvtkIdList = vtkIdList.New();
+            pvtkIdList.InsertNextId(iPnt);
+            pvtkCellArray.InsertNextCell(pvtkIdList);
+          }
+          iRow++;
+        }
+
+        vtkRenderer pvtkRenderer = null;
+        vtkRenderWindow pvtkRenderWindow = null;
+
+        // Create Components of the rendering subsystem
+        pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
+        pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
+
+        // Create a Mapper
+        vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
+        if (pvtkAppendPolyData != null)
+        {
+          pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
+        }
+        else if (pvtkAppendPolyData == null && pvtkPoints != null)
+        {
+          vtkPolyData pvtkPolyData = vtkPolyData.New();
+          pvtkPolyData.SetPoints(pvtkPoints);
+          pvtkPolyData.SetVerts(pvtkCellArray);
+          pvtkPolyDataMapper.SetInput(pvtkPolyData);
+        }
+
+        // Remove current Actor if present
+        if (Actor != null)
+        {
           try
           {
-            string[] sCoOrdinates = sLine.Split(',');
-            for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
-            {
-              string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
-              if (sOrdinates.Length == 3) // Expect x,y,z
-              {
-                double x = double.Parse(sOrdinates[0], pEnUs);
-                double y = double.Parse(sOrdinates[1], pEnUs);
-                double z = double.Parse(sOrdinates[2], pEnUs);
-                pvtkPoints.InsertNextPoint(x, y, z);
-              }
-              pPolygonCell.GetPointIds().InsertId(iPoint, iPoint);
-            }
+            vtkPropCollection p = pvtkRenderer.GetViewProps();
+            pvtkRenderer.RemoveViewProp(Actor);
           }
-          catch (Exception ex)
-          {
-
-          }
-          vtkCellArray pCellArray = vtkCellArray.New();
-          pCellArray.InsertNextCell(pPolygonCell);
-
-          vtkPolyData pPolyData = vtkPolyData.New();
-          pPolyData.SetPoints(pvtkPoints);
-          pPolyData.SetPolys(pCellArray);
-
-          pvtkAppendPolyData.AddInput(pPolyData);
+          catch (Exception exRemove) { /* ignore for now */}
         }
-        else if (sLine.StartsWith("POINT Z"))
+
+        // Create new Actor
+        Actor = vtkActor.New();
+
+        // Perhaps use volume instead?
+        // http://scipy-cookbook.readthedocs.io/items/vtkVolumeRendering.html
+        //vtkVolume pvtkVolume = new vtkVolume();
+        //pvtkVolume.SetMapper()
+
+        Actor.SetMapper(pvtkPolyDataMapper);
+        Actor.SetVisibility(1);
+
+        // Add Actor to View as a "Prop"
+        pvtkRenderer.AddViewProp(Actor);
+
+        if (pvtkRenderer.VisibleActorCount() == 1)
         {
-          if (pvtkCellArray == null)
-          {
-            pvtkCellArray = vtkCellArray.New();
-            pvtkPoints = vtkPoints.New();
-          }
+          // Setup Camera etc.
+          pvtkRenderer.ResetCamera();
+          pvtkRenderer.SetAmbient(1, 1, 1);
+          pvtkRenderer.LightFollowCameraOn();
 
-          sLine = sLine.Replace("POINT Z (", "");
-          sLine = sLine.Replace(")", "");
-
-          string[] sOrdinates = sLine.Split(' ');
-
-          double x = double.Parse(sOrdinates[0], pEnUs);
-          double y = double.Parse(sOrdinates[1], pEnUs);
-          double z = double.Parse(sOrdinates[2], pEnUs);
-          int iPnt = pvtkPoints.InsertNextPoint(x, y, z);
-
-          pvtkIdList = vtkIdList.New();
-          pvtkIdList.InsertNextId(iPnt);
-          pvtkCellArray.InsertNextCell(pvtkIdList);
+          //renWin.Render();
+          vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+          pvtkCamera.Zoom(1.0D);
+          pvtkRenderer.LightFollowCameraOn();
+          pvtkRenderer.SetLightFollowCamera(1);
         }
-        iRow++;
+
+
+        SetActorColor();
+
+        
       }
-
-      vtkRenderer pvtkRenderer = null;
-      vtkRenderWindow pvtkRenderWindow = null;
-
-      // Create Components of the rendering subsystem
-      pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
-      pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
-
-      // Create a Mapper
-      vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
-      if (pvtkAppendPolyData != null)
+      catch (Exception ex)
       {
-        pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
+        MaterialMessageBox.Show("Er ging iets fout!\n\n" + ex.Message, "SQL fout", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      else if (pvtkAppendPolyData == null && pvtkPoints != null)
-      {
-        vtkPolyData pvtkPolyData = vtkPolyData.New();
-        pvtkPolyData.SetPoints(pvtkPoints);
-        pvtkPolyData.SetVerts(pvtkCellArray);
-        pvtkPolyDataMapper.SetInput(pvtkPolyData);
-      }
-
-      // Remove current Actor if present
-      if (Actor != null)
-      {
-        try
-        {
-          vtkPropCollection p = pvtkRenderer.GetViewProps();
-          pvtkRenderer.RemoveViewProp(Actor);
-        }
-        catch (Exception exRemove) { /* ignore for now */}
-      }
-
-      // Create new Actor
-      Actor = vtkActor.New();
-
-      Actor.SetMapper(pvtkPolyDataMapper);
-      Actor.SetVisibility(1);
-      Actor.GetProperty().SetPointSize(6);
-
-      // Add Actor to View as a "Prop"
-      pvtkRenderer.AddViewProp(Actor);
-
-      // Setup Camera etc.
-      pvtkRenderer.ResetCamera();
-      pvtkRenderer.SetAmbient(1, 1, 1);
-      pvtkRenderer.LightFollowCameraOn();
-
-      //renWin.Render();
-      vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
-      pvtkCamera.Zoom(1.0D);
-      pvtkRenderer.LightFollowCameraOn();
-      pvtkRenderer.SetLightFollowCamera(1);
-
-      SetActorColor();
-
       pDBHelper.Connection.Close();
       pDBHelper = null;
     }
 
+    public void Execute()
+    {
+      btnExecute_Click(this, null);
+    }
 
     private void btnExecute_Click(object sender, EventArgs e)
     {
@@ -263,6 +285,8 @@ namespace PostGIS3DExplorer
 
         this.Actor.GetProperty().SetColor(red, green, blue);
 
+        Actor.GetProperty().SetPointSize(6);
+
         //Actor.GetProperty().GetClassName();
 
         if (rbtnOutline.Checked)
@@ -273,7 +297,20 @@ namespace PostGIS3DExplorer
         {
           this.Actor.GetProperty().SetEdgeVisibility(0);
         }
+        //this.Actor.GetProperty().SetOpacity(1);
+
+        // Specular is reflective value
+        //this.Actor.GetProperty().SetSpecular(0.9);
+
+        //this.Actor.GetProperty().SetSpecularColor(red, green, blue);
+
+
+        //this.Actor.GetProperty().SetAmbient(0.4);
+        //this.Actor.GetProperty().SetAmbientColor(red, green, blue);
+
+        //this.Actor.GetProperty().LoadMaterial()
         RenderWindowControl.RenderWindow.Render();
+
       }
     }
 
@@ -316,3 +353,4 @@ namespace PostGIS3DExplorer
     }
   }
 }
+

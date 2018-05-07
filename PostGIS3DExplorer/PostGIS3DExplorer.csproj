@@ -79,6 +79,12 @@
   <ItemGroup>
     <Compile Include="ConnectionTreeNode.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="DragDropReorderTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DragDropReorderTreeView.designer.cs">
+      <DependentUpon>DragDropReorderTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConnection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,12 @@
     <EmbeddedResource Include="SQLEditorControl.resx">
       <DependentUpon>SQLEditorControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Demodata\pand.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Demodata\ahn_sample.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -154,6 +166,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demodata\Demo project 2 - AHN en BAG.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Demodata\Demo project 1 - Basisvormen.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Demodata\demodata.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Screenshots\screenshot1.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\bug.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\information.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\question.png" />
@@ -162,8 +184,6 @@
     <Content Include="postgis3dexplorer.ico" />
     <None Include="Resources\ic_folder_open_black_24dp.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Screenshots\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

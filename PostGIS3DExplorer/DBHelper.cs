@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using Npgsql;
+using MaterialSkin.Controls;
+using System.Windows.Forms;
 
 namespace PostGIS3DExplorer
 {
@@ -83,8 +85,8 @@ namespace PostGIS3DExplorer
       }
       catch (Exception ex)
       {
-        Exception exExpand = new Exception(pResultCommand.CommandText + "\n\n" + ex.Message, ex);
-        throw exExpand;
+        //Exception exExpand = new Exception(pResultCommand.CommandText + "\n\n" + ex.Message, ex);
+        throw ex;
       }
       return pReturnTable;
     }

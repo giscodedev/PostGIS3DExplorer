@@ -33,8 +33,10 @@ namespace System.Windows.Forms
     public SQLTreeNode(RenderWindowControl pRenderWindowControl, PostGISConnectionParams pPostGISConnectionParams, string QueryName) : base(QueryName)
     {
       m_pPostGISConnectionParams = pPostGISConnectionParams;
-      this.ImageKey = "sql";
-      this.SelectedImageKey = "sql";
+      //this.ImageKey = "sql";
+      //this.SelectedImageKey = "sql";
+      this.ImageIndex = 0;
+      this.SelectedImageIndex = 0;
       m_pSQLEditorControl = new SQLEditorControl();
       m_pSQLEditorControl.Dock = DockStyle.Fill;
       m_pSQLEditorControl.rbnPanelQuery.Text = QueryName;
@@ -47,13 +49,40 @@ namespace System.Windows.Forms
       this.ContextMenuStrip = cms;
     }
 
+    public new SQLTreeNode Clone()
+    {
+      SQLTreeNode pCloneNode = new SQLTreeNode(m_pSQLEditorControl.RenderWindowControl, m_pPostGISConnectionParams, m_pSQLEditorControl.rbnPanelQuery.Text);
+      pCloneNode.SQLEditorControl.Query = this.SQLEditorControl.Query;
+      pCloneNode.SQLEditorControl.FillColor = this.SQLEditorControl.FillColor;
+      pCloneNode.SQLEditorControl.Outline = this.SQLEditorControl.Outline;
+      pCloneNode.SQLEditorControl.Actor = this.SQLEditorControl.Actor;
+
+      return pCloneNode;
+    }
+
+    public void Execute()
+    {
+      this.m_pSQLEditorControl.Execute();
+    }
+
+    public void RemoveWithCleanup()
+    {
+      this.Cleanup();
+      this.Remove();
+    }
+
     private void ContextMenuStripOnItemClickStart(object sender, ToolStripItemClickedEventArgs toolStripItemClickedEventArgs)
     {
+      this.ContextMenuStrip.Hide();
+      Application.DoEvents();
+
       switch (toolStripItemClickedEventArgs.ClickedItem.Text)
       {
+        case "Uitvoeren":
+          this.Execute();
+          break;
         case "Verwijderen":
-          this.Cleanup();
-          this.Remove();
+          this.RemoveWithCleanup();
           break;
       }
     }
@@ -304,10 +333,11 @@ namespace System.Windows.Forms
 
     private class TreeNodeContextMenu : MaterialContextMenuStrip
     {
+      public readonly ToolStripItem Execute = new MaterialToolStripMenuItem { Text = "Uitvoeren" };
       public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = "Verwijderen" };
       public TreeNodeContextMenu()
       {
-        Items.AddRange(new[] { Remove });
+        Items.AddRange(new[] { Execute, Remove });
       }
     }
   }

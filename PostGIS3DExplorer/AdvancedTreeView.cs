@@ -11,7 +11,7 @@ using System.Xml;
 namespace MaterialSkin.Controls
 {
   [Serializable]
-  public class AdvancedTreeView : TreeView
+  public class AdvancedTreeView : DragDropReorderTreeView
   {
 
     public void materialTreeView()

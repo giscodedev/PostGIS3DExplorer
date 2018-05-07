@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Connections>
+    <Connection>
+      <Queries>
+        <Query>
+          <Name>Block</Name>
+          <SQL>select st_astext(&#xD;
+  (st_dump((st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)))).geom&#xD;
+  )</SQL>
+          <FillColor>#FF8000</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Cilinder</Name>
+          <SQL>select st_astext(&#xD;
+  (st_dump((  st_extrude( st_buffer(st_geomfromtext('point(0 20 0)', 28992), 5, 15), 0, 0, 10)  ))).geom&#xD;
+  )</SQL>
+          <FillColor>Yellow</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Cilinder</Name>
+          <SQL>select st_astext(&#xD;
+  (st_dump(( st_translate( st_extrude( st_buffer(st_geomfromtext('point(0 0 0)', 28992), 2, 15), 0, 0, 30) , 0,0,-10)  ))).geom&#xD;
+  )</SQL>
+          <FillColor>Aqua</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Query</Name>
+          <SQL>select st_astext(&#xD;
+  (st_dump((   &#xD;
+  &#xD;
+  st_3ddifference&#xD;
+  (&#xD;
+  st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)&#xD;
+  ,&#xD;
+  st_translate( st_extrude( st_buffer(st_geomfromtext('point(0 0 0)', 28992), 4, 5), 0, 0, 30) , 0, 0,-10)&#xD;
+  )&#xD;
+&#xD;
+  ))).geom&#xD;
+  )</SQL>
+          <FillColor>Lime</FillColor>
+          <Outline>false</Outline>
+        </Query>
+      </Queries>
+      <PostGISConnection>
+        <Name>Localhost</Name>
+        <Host>localhost</Host>
+        <Database>postgis</Database>
+        <Port>5432</Port>
+        <Schema>wozbag</Schema>
+        <User_id>postgres</User_id>
+        <Password>postgres</Password>
+      </PostGISConnection>
+    </Connection>
+  </Connections>
+</Project>
