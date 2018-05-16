@@ -117,4 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="picExtension1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAADqSURBVEhL7c0/
+        jkFRFMfxR0IxjU6pVdPbwGyADdgAG7ABG2ADNsACLGDqaWc6Kg2FRPj+knfkuQ7ev6nGN/kkL/fec170
+        7/qM/Ul1fMdqOii7Mc6xkQ7KrIkd7Af61llpzWHLzQyl1MUJ4Q901kGhKlgjXG50pze5G8BbnNRHrj7w
+        i+QyK3n2A73N3ATJRWKF53qbqRYOCBdZ4fkemkndAuESsbw7zaSqB29BGpp9WhVf8IbT0Kx2PGwIb9BY
+        3p3RDrcGtvCGjOXdmQ20664pvIE8tOumNo7wHuehXdp5bQXvYRFLvHtVFF0AY9fESGPBewEAAAAASUVO
+        RK5CYII=
+</value>
+  </data>
+  <data name="picExtension2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xNzNun2MAAADqSURBVEhL7c0/
+        jkFRFMfxR0IxjU6pVdPbwGyADdgAG7ABG2ADNsACLGDqaWc6Kg2FRPj+knfkuQ7ev6nGN/kkL/fec170
+        7/qM/Ul1fMdqOii7Mc6xkQ7KrIkd7Af61llpzWHLzQyl1MUJ4Q901kGhKlgjXG50pze5G8BbnNRHrj7w
+        i+QyK3n2A73N3ATJRWKF53qbqRYOCBdZ4fkemkndAuESsbw7zaSqB29BGpp9WhVf8IbT0Kx2PGwIb9BY
+        3p3RDrcGtvCGjOXdmQ20664pvIE8tOumNo7wHuehXdp5bQXvYRFLvHtVFF0AY9fESGPBewEAAAAASUVO
+        RK5CYII=
+</value>
+  </data>
 </root>

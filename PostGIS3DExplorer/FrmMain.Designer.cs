@@ -31,9 +31,9 @@
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
       this.split3D_sql = new System.Windows.Forms.SplitContainer();
+      this.advancedTreeView1 = new MaterialSkin.Controls.AdvancedTreeView();
       this.imageList1 = new System.Windows.Forms.ImageList(this.components);
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.renderWindowControl1 = new Kitware.VTK.RenderWindowControl();
       this.SqlContainerPanel = new System.Windows.Forms.Panel();
       this.ribbon1 = new System.Windows.Forms.Ribbon();
       this.ribbonTab1 = new System.Windows.Forms.RibbonTab();
@@ -58,7 +58,7 @@
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
       this.mainControlsPanel = new System.Windows.Forms.Panel();
-      this.advancedTreeView1 = new MaterialSkin.Controls.AdvancedTreeView();
+      this.renderWindowControl1 = new Kitware.VTK.RenderWindowControl();
       ((System.ComponentModel.ISupportInitialize)(this.split3D_sql)).BeginInit();
       this.split3D_sql.Panel1.SuspendLayout();
       this.split3D_sql.Panel2.SuspendLayout();
@@ -91,6 +91,25 @@
       this.split3D_sql.SplitterDistance = 340;
       this.split3D_sql.TabIndex = 84;
       // 
+      // advancedTreeView1
+      // 
+      this.advancedTreeView1.AllowDrop = true;
+      this.advancedTreeView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.advancedTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.advancedTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
+      this.advancedTreeView1.ImageIndex = 0;
+      this.advancedTreeView1.ImageList = this.imageList1;
+      this.advancedTreeView1.LabelEdit = true;
+      this.advancedTreeView1.Location = new System.Drawing.Point(0, 0);
+      this.advancedTreeView1.Name = "advancedTreeView1";
+      this.advancedTreeView1.SelectedFocusColor = System.Drawing.Color.Empty;
+      this.advancedTreeView1.SelectedImageIndex = 0;
+      this.advancedTreeView1.SelectedLostFocusColor = System.Drawing.Color.Empty;
+      this.advancedTreeView1.Size = new System.Drawing.Size(340, 843);
+      this.advancedTreeView1.TabIndex = 0;
+      this.advancedTreeView1.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.advancedTreeView1_AfterLabelEdit);
+      this.advancedTreeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.advancedTreeView1_NodeMouseClick);
+      // 
       // imageList1
       // 
       this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -117,20 +136,6 @@
       this.splitContainer1.Size = new System.Drawing.Size(1079, 843);
       this.splitContainer1.SplitterDistance = 510;
       this.splitContainer1.TabIndex = 82;
-      // 
-      // renderWindowControl1
-      // 
-      this.renderWindowControl1.AddTestActors = false;
-      this.renderWindowControl1.BackColor = System.Drawing.Color.White;
-      this.renderWindowControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.renderWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.renderWindowControl1.ForeColor = System.Drawing.Color.Black;
-      this.renderWindowControl1.Location = new System.Drawing.Point(0, 0);
-      this.renderWindowControl1.Name = "renderWindowControl1";
-      this.renderWindowControl1.Size = new System.Drawing.Size(1079, 510);
-      this.renderWindowControl1.TabIndex = 81;
-      this.renderWindowControl1.TestText = null;
-      this.renderWindowControl1.Load += new System.EventHandler(this.renderWindowControl1_Load);
       // 
       // SqlContainerPanel
       // 
@@ -333,24 +338,17 @@
       this.mainControlsPanel.Size = new System.Drawing.Size(1426, 953);
       this.mainControlsPanel.TabIndex = 85;
       // 
-      // advancedTreeView1
+      // renderWindowControl1
       // 
-      this.advancedTreeView1.AllowDrop = true;
-      this.advancedTreeView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.advancedTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.advancedTreeView1.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
-      this.advancedTreeView1.ImageIndex = 0;
-      this.advancedTreeView1.ImageList = this.imageList1;
-      this.advancedTreeView1.LabelEdit = true;
-      this.advancedTreeView1.Location = new System.Drawing.Point(0, 0);
-      this.advancedTreeView1.Name = "advancedTreeView1";
-      this.advancedTreeView1.SelectedFocusColor = System.Drawing.Color.Empty;
-      this.advancedTreeView1.SelectedImageIndex = 0;
-      this.advancedTreeView1.SelectedLostFocusColor = System.Drawing.Color.Empty;
-      this.advancedTreeView1.Size = new System.Drawing.Size(340, 843);
-      this.advancedTreeView1.TabIndex = 0;
-      this.advancedTreeView1.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.advancedTreeView1_AfterLabelEdit);
-      this.advancedTreeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.advancedTreeView1_NodeMouseClick);
+      this.renderWindowControl1.AddTestActors = false;
+      this.renderWindowControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.renderWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.renderWindowControl1.Location = new System.Drawing.Point(0, 0);
+      this.renderWindowControl1.Name = "renderWindowControl1";
+      this.renderWindowControl1.Size = new System.Drawing.Size(1079, 510);
+      this.renderWindowControl1.TabIndex = 82;
+      this.renderWindowControl1.TestText = null;
+      this.renderWindowControl1.Load += new System.EventHandler(this.renderWindowControl1_Load);
       // 
       // FrmMain
       // 
@@ -378,7 +376,6 @@
 
     #endregion
     private System.Windows.Forms.SplitContainer splitContainer1;
-    private Kitware.VTK.RenderWindowControl renderWindowControl1;
     private System.Windows.Forms.OpenFileDialog openFileDialog1;
     private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     private System.Windows.Forms.SplitContainer split3D_sql;
@@ -406,6 +403,7 @@
     private System.Windows.Forms.RibbonButton rbtnZoomFull;
     private System.Windows.Forms.RibbonButton rbtnExecuteQuery;
     private System.Windows.Forms.RibbonButton rbtnRemoveQuery;
+    private Kitware.VTK.RenderWindowControl renderWindowControl1;
   }
 }
 

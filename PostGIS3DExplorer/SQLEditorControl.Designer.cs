@@ -39,6 +39,7 @@
       this.rbtnDelete = new System.Windows.Forms.RibbonButton();
       this.rbtnFillColor = new System.Windows.Forms.RibbonColorChooser();
       this.rbtnOutline = new System.Windows.Forms.RibbonCheckBox();
+      this.ribbonUpDown2 = new System.Windows.Forms.RibbonUpDown();
       this.panel1 = new System.Windows.Forms.Panel();
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
       this.panel1.SuspendLayout();
@@ -122,6 +123,7 @@
       this.rbnPanelQuery.Items.Add(this.rbtnDelete);
       this.rbnPanelQuery.Items.Add(this.rbtnFillColor);
       this.rbnPanelQuery.Items.Add(this.rbtnOutline);
+      this.rbnPanelQuery.Items.Add(this.ribbonUpDown2);
       this.rbnPanelQuery.Text = "Query";
       // 
       // rbtnExecute
@@ -154,6 +156,14 @@
       this.rbtnOutline.Checked = true;
       this.rbtnOutline.Text = "Omlijning";
       this.rbtnOutline.CheckBoxCheckChanged += new System.EventHandler(this.rbtnOutline_CheckedChanged);
+      // 
+      // ribbonUpDown2
+      // 
+      this.ribbonUpDown2.Text = "Transparantie";
+      this.ribbonUpDown2.TextBoxText = "";
+      this.ribbonUpDown2.TextBoxWidth = 50;
+      this.ribbonUpDown2.Value = "1";
+      this.ribbonUpDown2.Visible = false;
       // 
       // panel1
       // 
@@ -193,5 +203,6 @@
     internal System.Windows.Forms.RibbonTab rbnTabMain;
     private System.Windows.Forms.Panel panel1;
     internal System.Windows.Forms.RibbonPanel rbnPanelQuery;
+    private System.Windows.Forms.RibbonUpDown ribbonUpDown2;
   }
 }

@@ -37,7 +37,7 @@ namespace System.Windows.Forms
 
     private void this_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
     {
-      this.SelectedNode = this.GetNodeAt(e.X, e.Y);
+      //this.SelectedNode = this.GetNodeAt(e.X, e.Y);
     }
 
     private void this_ItemDrag(object sender, System.Windows.Forms.ItemDragEventArgs e)

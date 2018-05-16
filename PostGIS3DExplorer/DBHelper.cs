@@ -153,8 +153,34 @@ namespace PostGIS3DExplorer
       return iReturn;
     }
 
+    public DataTable PostGISExtensions()
+    {
+      DataTable pDataTable = null;
 
-   
+      string sSQL = @"
+                     select 
+                       name, 
+                       default_version, 
+                       installed_version, 
+                       comment 
+                     from 
+                       pg_available_extensions 
+                     where 
+                       name like 'post%'
+                     and
+                       installed_version is not null;";
+
+      if (m_pNpgsqlConnection.State == ConnectionState.Closed)
+      {
+        m_pNpgsqlConnection.Open();
+      }
+
+      NpgsqlCommand pResultCommand = new NpgsqlCommand(sSQL, m_pNpgsqlConnection);
+      pDataTable = GetDataTable(pResultCommand, "extensions");
+
+      return pDataTable;
+    }
+
   }
 
 

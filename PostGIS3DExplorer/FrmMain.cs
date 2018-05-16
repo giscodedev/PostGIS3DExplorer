@@ -51,6 +51,10 @@ namespace PostGIS3DExplorer
         LoadProject(sLastFileName);
       }
       this.Text = GenerateCaption();
+
+
+     
+
     }
 
     private string GenerateCaption()
@@ -74,7 +78,7 @@ namespace PostGIS3DExplorer
 
         string shortFileName = tokenLeft + tokenCenter + tokenRight;
 
-        sReturn += " - " + shortFileName;
+        sReturn += " - " + shortFileName + " (" + (Environment.Is64BitProcess ? "64" : "32") + "bit mode)";
       }
       return sReturn;
     }
@@ -156,6 +160,13 @@ namespace PostGIS3DExplorer
       vtkRenderer ren1 = renderWindowControl1.RenderWindow.GetRenderers().GetFirstRenderer();
       vtkRenderWindow renWin = renderWindowControl1.RenderWindow;
 
+      
+      int iAAFrames = (renWin as vtkWin32OpenGLRenderWindow).GetAAFrames();
+      if (iAAFrames == 0)
+      {
+        (renWin as vtkWin32OpenGLRenderWindow).SetAAFrames(2);
+      }
+
       ren1.SetBackground(1, 1, 1);
       vtkCamera camera = ren1.GetActiveCamera();
       camera.Elevation(-45);
@@ -163,21 +174,60 @@ namespace PostGIS3DExplorer
       // Anti-alias?
       //http://vtk.1045678.n5.nabble.com/Anti-Aliasing-td5597149.html
 
-      renWin.LineSmoothingOn();
-      renWin.SetLineSmoothing(1);
+      //renWin.LineSmoothingOn();
+      //renWin.SetLineSmoothing(1);
 
-      renWin.PolygonSmoothingOn();
-      renWin.SetPolygonSmoothing(1);
+      //renWin.PolygonSmoothingOn();
+      //renWin.SetPolygonSmoothing(1);
 
-      renWin.PointSmoothingOn();
-      renWin.SetPointSmoothing(1);
+      //renWin.PointSmoothingOn();
+      //renWin.SetPointSmoothing(1);
 
-      renWin.SetMultiSamples(1);
+      int iOpenGL = renWin.SupportsOpenGL();
+
+      
+      //Axes();
+
+      rbtnZoomFull_Click(this, null);
+
+      //renWin.SetAlphaBitPlanes(1);
+
+      //ren1.UseShadowsOn();
+      //ren1.UseDepthPeelingOn();
+
+      //renWin.SetMultiSamples(1);
 
       // Anti-alias (slow but should always work)
       // Too slow without OpenGL...
       //renWin.SetAAFrames(3);
-      renWin.SetAAFrames(5);
+    }
+
+    private void Axes()
+    {
+      // a renderer and render window
+      vtkRenderWindow renderWindow = renderWindowControl1.RenderWindow;
+      vtkRenderer renderer = renderWindow.GetRenderers().GetFirstRenderer();
+
+      vtkAxesActor axes = vtkAxesActor.New();
+      axes.SetShaftTypeToCylinder();
+      axes.SetTipTypeToSphere();
+
+      // The axes are positioned with a user transform
+      vtkTransform transform = vtkTransform.New();
+      transform.Translate(0.0, 0.0, 0.0);
+      axes.SetUserTransform(transform);
+      // properties of the axes labels can be set as follows
+      // this sets the x axis label to red
+      // axes.GetXAxisCaptionActor2D().GetCaptionTextProperty().SetColor(1,0,0);
+
+      // the actual text of the axis label can be changed:
+      // axes.SetXAxisLabelText("test");
+
+      renderer.AddActor(axes);
+      // we need to call Render() for the whole renderWindow, 
+      // because vtkAxesActor uses an overlayed renderer for the axes label
+      // in total we have now two renderer
+      renderWindow.Render();
     }
 
     private void Clear3DView()
@@ -207,18 +257,18 @@ namespace PostGIS3DExplorer
 
         }
 
-        // Anti-alias?
-        //http://vtk.1045678.n5.nabble.com/Anti-Aliasing-td5597149.html
-        renWin.LineSmoothingOn();
-        renWin.SetLineSmoothing(1);
-        renWin.PolygonSmoothingOn();
-        renWin.SetPolygonSmoothing(1);
-        renWin.PointSmoothingOn();
-        renWin.SetMultiSamples(1);
+        //// Anti-alias?
+        ////http://vtk.1045678.n5.nabble.com/Anti-Aliasing-td5597149.html
+        //renWin.LineSmoothingOn();
+        //renWin.SetLineSmoothing(1);
+        //renWin.PolygonSmoothingOn();
+        //renWin.SetPolygonSmoothing(1);
+        //renWin.PointSmoothingOn();
+        //renWin.SetMultiSamples(1);
 
-        // Anti-alias (slow but should always work)
-        // Too slow without OpenGL...
-        renWin.SetAAFrames(2);
+        //// Anti-alias (slow but should always work)
+        //// Too slow without OpenGL...
+        //renWin.SetAAFrames(2);
 
         renWin.Render();
       }
@@ -229,21 +279,44 @@ namespace PostGIS3DExplorer
       
     }
 
+    private void rbtnZoomFull_Click(object sender, EventArgs e)
+    {
+      vtkRenderer pvtkRenderer = null;
+      vtkRenderWindow pvtkRenderWindow = null;
+      pvtkRenderer = this.renderWindowControl1.RenderWindow.GetRenderers().GetFirstRenderer();
+      pvtkRenderWindow = this.renderWindowControl1.RenderWindow;
+
+      // Setup Camera etc.
+      pvtkRenderer.ResetCamera();
+      pvtkRenderer.SetAmbient(1, 1, 1);
+      pvtkRenderer.LightFollowCameraOn();
+
+      //renWin.Render();
+      vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+      pvtkCamera.Zoom(1.0D);
+      pvtkRenderer.LightFollowCameraOn();
+      pvtkRenderer.SetLightFollowCamera(1);
+
+      pvtkRenderWindow.Render();
+    }
+
     private void advancedTreeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
     {
       rbtnDemoData.Enabled = false;
+      SqlContainerPanel.Controls.Clear();
 
       if (e.Node is ConnectionTreeNode)
       {
         ConnectionTreeNode pConnectionTreeNode = e.Node as ConnectionTreeNode;
         rbtnDemoData.Enabled = true;
+        rbtnExecuteQuery.Enabled = false;
       }
       else if (e.Node is SQLTreeNode)
       {
         SQLTreeNode pSQLTreeNode = e.Node as SQLTreeNode;
-        SqlContainerPanel.Controls.Clear();
         SqlContainerPanel.Controls.Add(pSQLTreeNode.SQLEditorControl);
         rbtnDemoData.Enabled = true;
+        rbtnExecuteQuery.Enabled = true;
       }
     }
 
@@ -381,7 +454,7 @@ namespace PostGIS3DExplorer
             string sDemoDataPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName + "\\Demodata").Replace('\\', '/');
             string sDemoDataSql = Path.Combine(sDemoDataPath, "demodata.sql");
             string sSQL = File.ReadAllText(sDemoDataSql).Replace("[demodatapath]", sDemoDataPath);
-            Console.WriteLine(sSQL);
+            //Console.WriteLine(sSQL);
 
             NpgsqlCommand pNpgsqlCommand = new NpgsqlCommand(sSQL, pNpgsqlConnection);
             pNpgsqlCommand.ExecuteScalar();
@@ -421,6 +494,12 @@ namespace PostGIS3DExplorer
 
       LoadProject(sDemoProject);
 
+      // Edit database parameters
+      if (advancedTreeView1.Nodes.Count > 0)
+      {
+        ConnectionTreeNode pConnectionTreeNode = advancedTreeView1.Nodes[0] as ConnectionTreeNode;
+        pConnectionTreeNode.EditProperties();
+      }
       MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     }
@@ -441,27 +520,6 @@ namespace PostGIS3DExplorer
 
     }
 
-    private void rbtnZoomFull_Click(object sender, EventArgs e)
-    {
-      vtkRenderer pvtkRenderer = null;
-      vtkRenderWindow pvtkRenderWindow = null;
-      pvtkRenderer = this.renderWindowControl1.RenderWindow.GetRenderers().GetFirstRenderer();
-      pvtkRenderWindow = this.renderWindowControl1.RenderWindow;
-
-      // Setup Camera etc.
-      pvtkRenderer.ResetCamera();
-      pvtkRenderer.SetAmbient(1, 1, 1);
-      pvtkRenderer.LightFollowCameraOn();
-
-      //renWin.Render();
-      vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
-      pvtkCamera.Zoom(1.0D);
-      pvtkRenderer.LightFollowCameraOn();
-      pvtkRenderer.SetLightFollowCamera(1);
-
-      pvtkRenderWindow.Render();
-
-    }
 
 
   }

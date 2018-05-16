@@ -49,18 +49,23 @@ namespace System.Windows.Forms
       switch (toolStripItemClickedEventArgs.ClickedItem.Text)
       {
         case "Verbinding":
-          FrmConnection pFrmConnection = new FrmConnection();
-          pFrmConnection.PostGISConnectionParams = this.PostGISConnectionParams;
-          if (pFrmConnection.ShowDialog() == DialogResult.OK)
-          {
-            PostGISConnectionParams pPostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
-            this.PostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
-            this.Text = this.PostGISConnectionParams.Name;
-          }
+          EditProperties();
           break;
         case "Verwijderen":
           this.Remove();
           break;
+      }
+    }
+
+    public void EditProperties()
+    {
+      FrmConnection pFrmConnection = new FrmConnection();
+      pFrmConnection.PostGISConnectionParams = this.PostGISConnectionParams;
+      if (pFrmConnection.ShowDialog() == DialogResult.OK)
+      {
+        PostGISConnectionParams pPostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
+        this.PostGISConnectionParams = pFrmConnection.PostGISConnectionParams;
+        this.Text = this.PostGISConnectionParams.Name;
       }
     }
 

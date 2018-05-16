@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConnection));
       this.txtLoginPassword = new MaterialSkin.Controls.MaterialSingleLineTextField();
       this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
       this.txtLoginName = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -43,6 +44,12 @@
       this.btnLoginTest = new MaterialSkin.Controls.MaterialFlatButton();
       this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
       this.txtName = new MaterialSkin.Controls.MaterialSingleLineTextField();
+      this.lblExtension1 = new MaterialSkin.Controls.MaterialLabel();
+      this.lblExtension2 = new MaterialSkin.Controls.MaterialLabel();
+      this.picExtension1 = new System.Windows.Forms.PictureBox();
+      this.picExtension2 = new System.Windows.Forms.PictureBox();
+      ((System.ComponentModel.ISupportInitialize)(this.picExtension1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picExtension2)).BeginInit();
       this.SuspendLayout();
       // 
       // txtLoginPassword
@@ -224,7 +231,7 @@
       this.lblLoginStatus.Location = new System.Drawing.Point(22, 363);
       this.lblLoginStatus.MouseState = MaterialSkin.MouseState.HOVER;
       this.lblLoginStatus.Name = "lblLoginStatus";
-      this.lblLoginStatus.Size = new System.Drawing.Size(358, 52);
+      this.lblLoginStatus.Size = new System.Drawing.Size(358, 30);
       this.lblLoginStatus.TabIndex = 11;
       this.lblLoginStatus.Text = "...";
       this.lblLoginStatus.Visible = false;
@@ -277,13 +284,67 @@
       this.txtName.Text = "Postgis #1";
       this.txtName.UseSystemPasswordChar = false;
       // 
+      // lblExtension1
+      // 
+      this.lblExtension1.Depth = 0;
+      this.lblExtension1.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblExtension1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblExtension1.Location = new System.Drawing.Point(51, 391);
+      this.lblExtension1.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblExtension1.Name = "lblExtension1";
+      this.lblExtension1.Size = new System.Drawing.Size(358, 24);
+      this.lblExtension1.TabIndex = 11;
+      this.lblExtension1.Text = "...";
+      this.lblExtension1.Visible = false;
+      // 
+      // lblExtension2
+      // 
+      this.lblExtension2.Depth = 0;
+      this.lblExtension2.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblExtension2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblExtension2.Location = new System.Drawing.Point(51, 421);
+      this.lblExtension2.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblExtension2.Name = "lblExtension2";
+      this.lblExtension2.Size = new System.Drawing.Size(358, 24);
+      this.lblExtension2.TabIndex = 11;
+      this.lblExtension2.Text = "...";
+      this.lblExtension2.Visible = false;
+      // 
+      // picExtension1
+      // 
+      this.picExtension1.Image = ((System.Drawing.Image)(resources.GetObject("picExtension1.Image")));
+      this.picExtension1.Location = new System.Drawing.Point(20, 391);
+      this.picExtension1.Margin = new System.Windows.Forms.Padding(0);
+      this.picExtension1.Name = "picExtension1";
+      this.picExtension1.Size = new System.Drawing.Size(24, 24);
+      this.picExtension1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+      this.picExtension1.TabIndex = 15;
+      this.picExtension1.TabStop = false;
+      this.picExtension1.Visible = false;
+      // 
+      // picExtension2
+      // 
+      this.picExtension2.Image = ((System.Drawing.Image)(resources.GetObject("picExtension2.Image")));
+      this.picExtension2.Location = new System.Drawing.Point(20, 421);
+      this.picExtension2.Margin = new System.Windows.Forms.Padding(0);
+      this.picExtension2.Name = "picExtension2";
+      this.picExtension2.Size = new System.Drawing.Size(24, 24);
+      this.picExtension2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+      this.picExtension2.TabIndex = 15;
+      this.picExtension2.TabStop = false;
+      this.picExtension2.Visible = false;
+      // 
       // FrmConnection
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(421, 457);
+      this.ClientSize = new System.Drawing.Size(421, 467);
+      this.Controls.Add(this.picExtension2);
+      this.Controls.Add(this.picExtension1);
       this.Controls.Add(this.btnLogin);
       this.Controls.Add(this.txtLoginDatabase);
+      this.Controls.Add(this.lblExtension2);
+      this.Controls.Add(this.lblExtension1);
       this.Controls.Add(this.lblLoginStatus);
       this.Controls.Add(this.txtLoginPassword);
       this.Controls.Add(this.btnLoginTest);
@@ -305,6 +366,8 @@
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "PostgreSQL connectie";
       this.Load += new System.EventHandler(this.FrmConnection_Load);
+      ((System.ComponentModel.ISupportInitialize)(this.picExtension1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picExtension2)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -327,5 +390,9 @@
     private MaterialSkin.Controls.MaterialFlatButton btnLoginTest;
     private MaterialSkin.Controls.MaterialLabel materialLabel3;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtName;
+    private MaterialSkin.Controls.MaterialLabel lblExtension1;
+    private MaterialSkin.Controls.MaterialLabel lblExtension2;
+    private System.Windows.Forms.PictureBox picExtension1;
+    private System.Windows.Forms.PictureBox picExtension2;
   }
 }

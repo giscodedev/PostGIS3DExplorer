@@ -4,39 +4,45 @@
     <Connection>
       <Queries>
         <Query>
-          <Name>Block</Name>
+          <Name>Blok</Name>
           <SQL>select st_astext(&#xD;
-  (st_dump((st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)))).geom&#xD;
+  (st_dump((st_extrude( st_expand(st_geomfromtext('point(10 10)', 28992), 5, 5), 0, 0, 10)))).geom&#xD;
   )</SQL>
-          <FillColor>#FF8000</FillColor>
+          <FillColor>#80FF80</FillColor>
           <Outline>true</Outline>
         </Query>
         <Query>
-          <Name>Cilinder</Name>
+          <Name>Lijn</Name>
+          <SQL>select st_astext(st_geometryfromtext('LINESTRING (10 10 -10, 10 10 20, 15 25 20)'))</SQL>
+          <FillColor>Red</FillColor>
+          <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Cilinder #1</Name>
           <SQL>select st_astext(&#xD;
   (st_dump((  st_extrude( st_buffer(st_geomfromtext('point(0 20 0)', 28992), 5, 15), 0, 0, 10)  ))).geom&#xD;
   )</SQL>
           <FillColor>Yellow</FillColor>
-          <Outline>true</Outline>
+          <Outline>false</Outline>
         </Query>
         <Query>
-          <Name>Cilinder</Name>
+          <Name>Cilinder #2</Name>
           <SQL>select st_astext(&#xD;
   (st_dump(( st_translate( st_extrude( st_buffer(st_geomfromtext('point(0 0 0)', 28992), 2, 15), 0, 0, 30) , 0,0,-10)  ))).geom&#xD;
   )</SQL>
           <FillColor>Aqua</FillColor>
-          <Outline>true</Outline>
+          <Outline>false</Outline>
         </Query>
         <Query>
-          <Name>Query</Name>
+          <Name>Blok minus Cilinder</Name>
           <SQL>select st_astext(&#xD;
   (st_dump((   &#xD;
   &#xD;
   st_3ddifference&#xD;
   (&#xD;
-  st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)&#xD;
+  st_extrude( st_expand(st_geomfromtext('point(-10 0)', 28992), 5, 5), 0, 0, 10)&#xD;
   ,&#xD;
-  st_translate( st_extrude( st_buffer(st_geomfromtext('point(0 0 0)', 28992), 4, 5), 0, 0, 30) , 0, 0,-10)&#xD;
+  st_translate( st_extrude( st_buffer(st_geomfromtext('point(-10 0 0)', 28992), 4, 5), 0, 0, 30) , 0, 0,-10)&#xD;
   )&#xD;
 &#xD;
   ))).geom&#xD;

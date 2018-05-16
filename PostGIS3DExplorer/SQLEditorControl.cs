@@ -14,12 +14,21 @@ using MaterialSkin.Controls;
 
 namespace PostGIS3DExplorer
 {
+  public enum ActorType
+  {
+    Polygon,
+    PolyLine,
+    Point
+  }
+
   public partial class SQLEditorControl : UserControl
   {
     private NumberFormatInfo pEnUs = CultureInfo.GetCultureInfo("en-us").NumberFormat;
     private NumberFormatInfo pDutch = CultureInfo.GetCultureInfo("nl-nl").NumberFormat;
 
     public vtkActor Actor { get; set; }
+    public ActorType actorType;
+
     public RenderWindowControl RenderWindowControl { get; set; }
 
     private PostGISConnectionParams m_pPostGISConnectionParams = new PostGISConnectionParams();
@@ -62,7 +71,8 @@ namespace PostGIS3DExplorer
     private void SQLExecute(string sSQL)
     {
       vtkAppendPolyData pvtkAppendPolyData = null;
-      vtkPolygon pPolygonCell = null;
+      vtkPolygon pvtkPolygon = null;
+      vtkPolyLine pvtkPolyLine = null;
       vtkPoints pvtkPoints = null;
       vtkPointSource pvtkPointSource = null;
       vtkCellArray pvtkCellArray = null;
@@ -84,6 +94,7 @@ namespace PostGIS3DExplorer
           {
             if (pvtkAppendPolyData == null)
             {
+              actorType = ActorType.Polygon;
               pvtkAppendPolyData = vtkAppendPolyData.New();
             }
             sLine = sLine.Replace("TRIANGLE Z ((", "");
@@ -92,7 +103,7 @@ namespace PostGIS3DExplorer
             sLine = sLine.Replace("),(", "");
 
             pvtkPoints = vtkPoints.New();
-            pPolygonCell = vtkPolygon.New();
+            pvtkPolygon = vtkPolygon.New();
             try
             {
               string[] sCoOrdinates = sLine.Split(',');
@@ -106,7 +117,7 @@ namespace PostGIS3DExplorer
                   double z = double.Parse(sOrdinates[2], pEnUs);
                   pvtkPoints.InsertNextPoint(x, y, z);
                 }
-                pPolygonCell.GetPointIds().InsertId(iPoint, iPoint);
+                pvtkPolygon.GetPointIds().InsertId(iPoint, iPoint);
               }
             }
             catch (Exception ex)
@@ -114,18 +125,63 @@ namespace PostGIS3DExplorer
 
             }
             vtkCellArray pCellArray = vtkCellArray.New();
-            pCellArray.InsertNextCell(pPolygonCell);
+            pCellArray.InsertNextCell(pvtkPolygon);
 
             vtkPolyData pPolyData = vtkPolyData.New();
             pPolyData.SetPoints(pvtkPoints);
             pPolyData.SetPolys(pCellArray);
 
-            pvtkAppendPolyData.AddInput(pPolyData);
+            //pvtkAppendPolyData.AddInput(pPolyData);
+            pvtkAppendPolyData.AddInputData(pPolyData);
+          }
+          else if (sLine.StartsWith("LINESTRING Z"))
+          {
+            if (pvtkAppendPolyData == null)
+            {
+              actorType = ActorType.PolyLine;
+              pvtkAppendPolyData = vtkAppendPolyData.New();
+            }
+            sLine = sLine.Replace("LINESTRING Z (", "");
+            sLine = sLine.Replace(")", "");
+
+            pvtkPoints = vtkPoints.New();
+            pvtkPolyLine = vtkPolyLine.New();
+            try
+            {
+              string[] sCoOrdinates = sLine.Split(',');
+              for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+              {
+                string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
+                if (sOrdinates.Length == 3) // Expect x,y,z
+                {
+                  double x = double.Parse(sOrdinates[0], pEnUs);
+                  double y = double.Parse(sOrdinates[1], pEnUs);
+                  double z = double.Parse(sOrdinates[2], pEnUs);
+                  pvtkPoints.InsertNextPoint(x, y, z);
+                }
+                pvtkPolyLine.GetPointIds().InsertId(iPoint, iPoint);
+              }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            vtkCellArray pCellArray = vtkCellArray.New();
+            pCellArray.InsertNextCell(pvtkPolyLine);
+
+            vtkPolyData pPolyData = vtkPolyData.New();
+
+            pPolyData.SetPoints(pvtkPoints);
+            pPolyData.SetLines(pCellArray);
+
+            //pvtkAppendPolyData.AddInput(pPolyData);
+            pvtkAppendPolyData.AddInputData(pPolyData);
           }
           else if (sLine.StartsWith("POINT Z"))
           {
             if (pvtkCellArray == null)
             {
+              actorType = ActorType.Point;
               pvtkCellArray = vtkCellArray.New();
               pvtkPoints = vtkPoints.New();
             }
@@ -165,7 +221,8 @@ namespace PostGIS3DExplorer
           vtkPolyData pvtkPolyData = vtkPolyData.New();
           pvtkPolyData.SetPoints(pvtkPoints);
           pvtkPolyData.SetVerts(pvtkCellArray);
-          pvtkPolyDataMapper.SetInput(pvtkPolyData);
+          //pvtkPolyDataMapper.SetInput(pvtkPolyData);
+          pvtkPolyDataMapper.SetInputData(pvtkPolyData);
         }
 
         // Remove current Actor if present
@@ -285,19 +342,40 @@ namespace PostGIS3DExplorer
 
         this.Actor.GetProperty().SetColor(red, green, blue);
 
-        Actor.GetProperty().SetPointSize(6);
+        if (actorType == ActorType.Polygon)
+        {
+          if (rbtnOutline.Checked)
+          {
+            this.Actor.GetProperty().SetEdgeVisibility(1);
+          }
+          else
+          {
+            this.Actor.GetProperty().SetEdgeVisibility(0);
+          }
+        }
+        else if (actorType == ActorType.PolyLine)
+        {
+          Actor.GetProperty().SetLineWidth(6);
+          Actor.GetProperty().SetRenderLinesAsTubes(true);
+        }
+        else if (actorType == ActorType.Point)
+        {
+          if (rbtnOutline.Checked)
+          {
+            this.Actor.GetProperty().SetEdgeVisibility(1);
+          }
+          else
+          {
+            this.Actor.GetProperty().SetEdgeVisibility(0);
+          }
+          Actor.GetProperty().SetPointSize(12);
+          Actor.GetProperty().SetRenderPointsAsSpheres(true);
+        }
 
         //Actor.GetProperty().GetClassName();
 
-        if (rbtnOutline.Checked)
-        {
-          this.Actor.GetProperty().SetEdgeVisibility(1);
-        }
-        else
-        {
-          this.Actor.GetProperty().SetEdgeVisibility(0);
-        }
-        //this.Actor.GetProperty().SetOpacity(1);
+
+        //this.Actor.GetProperty().SetOpacity(0.95);
 
         // Specular is reflective value
         //this.Actor.GetProperty().SetSpecular(0.9);

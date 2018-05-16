@@ -60,7 +60,7 @@ namespace PostGIS3DExplorer
         sConnectionString.Append(";");
 
         //sConnectionString.Append("SyncNotification=true;");
-        sConnectionString.Append(";CommandTimeout=0;");
+        sConnectionString.Append(";CommandTimeout=0;Timeout=600;");
 
         return sConnectionString.ToString();
       }
