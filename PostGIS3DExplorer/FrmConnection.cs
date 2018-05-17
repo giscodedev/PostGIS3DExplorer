@@ -151,12 +151,14 @@ namespace PostGIS3DExplorer
 
       try
       {
-        lblLoginStatus.Text = pPostGISConnectionParams.TestConnection();
+        DBHelper pDBHelper = new DBHelper(pPostGISConnectionParams);
+
+        lblLoginStatus.Text = pDBHelper.GetSingleResultQuery("select version();").ToString();
 
         lblExtension1.Text = "postgis";
         lblExtension2.Text = "postgis_sfcgal";
 
-        DataTable pExtensions = new DBHelper(pPostGISConnectionParams).PostGISExtensions();
+        DataTable pExtensions = pDBHelper.PostGISExtensions();
         foreach (DataRow pDataRow in pExtensions.Rows)
         {
           if (pDataRow.Field<string>("name") == lblExtension1.Text)
@@ -170,7 +172,8 @@ namespace PostGIS3DExplorer
             lblExtension2.Text += " (" + pDataRow.Field<string>("installed_version") + ")";
           }
         }
-
+        pDBHelper.Connection.Close();
+        pDBHelper = null;
       }
       catch (Exception ex)
       {
