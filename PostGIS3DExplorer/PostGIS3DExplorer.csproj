@@ -138,6 +138,7 @@
       <DependentUpon>SQLEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TreeNodes\SQLTreeNode.cs" />
+    <None Include="Screenshots\screenshot002.png" />
     <EmbeddedResource Include="FrmConnection.resx">
       <DependentUpon>FrmConnection.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,7 +208,7 @@
     </Content>
     <EmbeddedResource Include="Resources\warning.png" />
     <EmbeddedResource Include="Resources\check.png" />
-    <None Include="Screenshots\screenshot1.png" />
+    <None Include="Screenshots\screenshot001.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\bug.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\information.png" />
     <EmbeddedResource Include="MaterialSkin\Resources\question.png" />
