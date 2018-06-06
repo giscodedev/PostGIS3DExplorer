@@ -60,6 +60,16 @@ namespace PostGIS3DExplorer
       }
       #endregion
 
+      this.Text = Program.resourceManager.GetString("FRM_CONNECTION_TITLE", Program.CultureInfo);
+      lblName.Text = Program.resourceManager.GetString("FRM_CONNECTION_NAME", Program.CultureInfo);
+      lblUserName.Text = Program.resourceManager.GetString("FRM_CONNECTION_USERNAME", Program.CultureInfo);
+      lblPassword.Text = Program.resourceManager.GetString("FRM_CONNECTION_PASSWORD", Program.CultureInfo);
+      lblServer.Text = Program.resourceManager.GetString("FRM_CONNECTION_SERVER", Program.CultureInfo);
+      lblPort.Text = Program.resourceManager.GetString("FRM_CONNECTION_PORT", Program.CultureInfo);
+      lblDatabase.Text = Program.resourceManager.GetString("FRM_CONNECTION_DATABASE", Program.CultureInfo);
+      btnLoginTest.Text = Program.resourceManager.GetString("FRM_CONNECTION_LOGONTEST", Program.CultureInfo);
+      btnLogin.Text = Program.resourceManager.GetString("FRM_CONNECTION_LOGON", Program.CultureInfo);
+
       this.DialogResult = DialogResult.None;
     }
 

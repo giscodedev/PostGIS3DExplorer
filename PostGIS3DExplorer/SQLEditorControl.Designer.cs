@@ -41,6 +41,7 @@
       this.rbtnOutline = new System.Windows.Forms.RibbonCheckBox();
       this.ribbonUpDown2 = new System.Windows.Forms.RibbonUpDown();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.prgMain = new MaterialSkin.Controls.MaterialProgressBar();
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
       this.panel1.SuspendLayout();
       this.SuspendLayout();
@@ -76,7 +77,7 @@
       this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
       this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
       this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-      this.fastColoredTextBox1.Size = new System.Drawing.Size(660, 186);
+      this.fastColoredTextBox1.Size = new System.Drawing.Size(660, 171);
       this.fastColoredTextBox1.TabIndex = 81;
       this.fastColoredTextBox1.TabLength = 2;
       this.fastColoredTextBox1.Text = "select st_astext( \r\n  (st_dump((st_extrude( st_expand(st_geomfromtext(\'point(0 0)" +
@@ -170,12 +171,24 @@
       this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.panel1.Controls.Add(this.prgMain);
       this.panel1.Controls.Add(this.ribbon1);
       this.panel1.Controls.Add(this.fastColoredTextBox1);
       this.panel1.Location = new System.Drawing.Point(2, -27);
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(660, 299);
       this.panel1.TabIndex = 86;
+      // 
+      // prgMain
+      // 
+      this.prgMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.prgMain.Depth = 0;
+      this.prgMain.Location = new System.Drawing.Point(3, 292);
+      this.prgMain.MouseState = MaterialSkin.MouseState.HOVER;
+      this.prgMain.Name = "prgMain";
+      this.prgMain.Size = new System.Drawing.Size(650, 5);
+      this.prgMain.TabIndex = 86;
       // 
       // SQLEditorControl
       // 
@@ -185,6 +198,7 @@
       this.Controls.Add(this.panel1);
       this.Name = "SQLEditorControl";
       this.Size = new System.Drawing.Size(665, 275);
+      this.Load += new System.EventHandler(this.SQLEditorControl_Load);
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
       this.panel1.ResumeLayout(false);
       this.ResumeLayout(false);
@@ -204,5 +218,6 @@
     private System.Windows.Forms.Panel panel1;
     internal System.Windows.Forms.RibbonPanel rbnPanelQuery;
     private System.Windows.Forms.RibbonUpDown ribbonUpDown2;
+    private MaterialSkin.Controls.MaterialProgressBar prgMain;
   }
 }

@@ -6,6 +6,8 @@ using Kitware.VTK;
 using System.IO;
 using System.Reflection;
 using Npgsql;
+using System.Globalization;
+using System.Resources;
 
 namespace PostGIS3DExplorer
 {
@@ -13,6 +15,8 @@ namespace PostGIS3DExplorer
   {
     protected MruStripMenuInline m_pMruMenu;
     private string m_sProjectFileName = "";
+
+    public EventHandler SwitchLanguage;
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
@@ -34,6 +38,15 @@ namespace PostGIS3DExplorer
 
     private void FrmMain_Load(object sender, EventArgs e)
     {
+      if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName == CultureInfo.GetCultureInfo("nl-NL").TwoLetterISOLanguageName)
+      {
+        rbtnSwitchLanguage_Click(rbtnNL, null);
+      }
+      else
+      {
+        rbtnSwitchLanguage_Click(rbtnEN, null);
+      }
+
       advancedTreeView1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_11;
       advancedTreeView1.SelectedFocusColor = Program.selectionColor;
       advancedTreeView1.SelectedLostFocusColor = Color.LightGray;
@@ -52,9 +65,10 @@ namespace PostGIS3DExplorer
       }
       this.Text = GenerateCaption();
 
-
-     
-
+      if (this.SwitchLanguage != null)
+      {
+        SwitchLanguage(this, new SwitchLanguageEventArgs(Program.CultureInfo));
+      }
     }
 
     private string GenerateCaption()
@@ -65,7 +79,9 @@ namespace PostGIS3DExplorer
       AssemblyName pAssemblyName = pAssembly.GetName();
       System.Version pVersion = pAssemblyName.Version;
 
-      sReturn = pAssemblyName.Name + " " + pVersion.Major + "." + pVersion.Minor + "." + pVersion.Build; ;
+      string sAppName = Program.resourceManager.GetString("APP_NAME", Program.CultureInfo);
+
+      sReturn = sAppName + " " + pVersion.Major + "." + pVersion.Minor + "." + pVersion.Build; ;
       if (m_sProjectFileName != "")
       {
         const int MAX_WIDTH = 50;
@@ -314,9 +330,14 @@ namespace PostGIS3DExplorer
       else if (e.Node is SQLTreeNode)
       {
         SQLTreeNode pSQLTreeNode = e.Node as SQLTreeNode;
+        //pSQLTreeNode.SQLEditorControl.FrmMain = this;
         SqlContainerPanel.Controls.Add(pSQLTreeNode.SQLEditorControl);
         rbtnDemoData.Enabled = true;
         rbtnExecuteQuery.Enabled = true;
+        if (this.SwitchLanguage != null)
+        {
+          SwitchLanguage(this, new SwitchLanguageEventArgs(Program.CultureInfo));
+        }
       }
     }
 
@@ -362,7 +383,7 @@ namespace PostGIS3DExplorer
 
     private void RemoveAllQueries_Click(object sender, EventArgs e)
     {
-      if (MaterialMessageBox.Show(this, "Alles wissen en opnieuw beginnen?", "Vraag", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+      if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_QUERY_REMOVEALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
         // Avoid "advancedTreeView1.Nodes.Clear()" for risc of late cleanup of resources
         advancedTreeView1.ClearWithCleanup();
@@ -415,7 +436,7 @@ namespace PostGIS3DExplorer
       }
       if (advancedTreeView1.SelectedNode is ConnectionTreeNode)
       {
-        if (MaterialMessageBox.Show(this, "Complete connectie en bijbehorende vragen wissen?", "Vraag", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+        if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_CONNECTION_REMOVE_ALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
         {
           ConnectionTreeNode pConnectionTreeNode = advancedTreeView1.SelectedNode as ConnectionTreeNode;
           for (int iQuery = pConnectionTreeNode.Nodes.Count - 1; iQuery >= 0; iQuery--)
@@ -440,7 +461,7 @@ namespace PostGIS3DExplorer
     /// <param name="e"></param>
     private void rbtnDemoData_Click(object sender, EventArgs e)
     {
-      if (MaterialMessageBox.Show(this, "Wil je de demo dataset laden in de huidige connectie?\n\nTabellen:\npublic.pand\npublic.ahn_sample\n\nLet op: eventuele bestaande tabellen worden overschreven!", "Demodata laden", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)==DialogResult.OK)
+      if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_LOAD_DEMODATA", Program.CultureInfo).Replace("\\n", "\n"), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
         ConnectionTreeNode pConnectionTreeNode = this.GetConnectionTreeNode();
 
@@ -459,12 +480,11 @@ namespace PostGIS3DExplorer
             NpgsqlCommand pNpgsqlCommand = new NpgsqlCommand(sSQL, pNpgsqlConnection);
             pNpgsqlCommand.ExecuteScalar();
 
-            MaterialMessageBox.Show(this, "Demo dataset is geladen.", "Demodata laden", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_SUCCESS", Program.CultureInfo), Program.resourceManager.GetString("MESSAGE_SUCCESS", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Information);
           }
           catch (Exception ex)
           {
-            MaterialMessageBox.Show(this, "Er ging iets mis tijdens het laden!\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_ERROR", Program.CultureInfo) + "!\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", Program.resourceManager.GetString("MESSAGE_ERROR", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Error);
           }
           finally
           {
@@ -500,7 +520,7 @@ namespace PostGIS3DExplorer
         ConnectionTreeNode pConnectionTreeNode = advancedTreeView1.Nodes[0] as ConnectionTreeNode;
         pConnectionTreeNode.EditProperties();
       }
-      MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      //MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     }
 
@@ -520,7 +540,45 @@ namespace PostGIS3DExplorer
 
     }
 
+    private void rbtnSwitchLanguage_Click(object sender, EventArgs e)
+    {
+      if (sender == rbtnNL)
+      {
+        Program.CultureInfo = CultureInfo.GetCultureInfo("nl-NL");
+      }
+      else
+      {
+        Program.CultureInfo = CultureInfo.GetCultureInfo("en-US");
+      }
 
+      // Set all UI values
+      this.Text = GenerateCaption();
 
+      rbtnSave.Text = Program.resourceManager.GetString("SAVE", Program.CultureInfo);
+      rbtnSaveAs.Text = Program.resourceManager.GetString("SAVE_AS", Program.CultureInfo);
+      rbtnLoad.Text = Program.resourceManager.GetString("LOAD", Program.CultureInfo);
+      rbtnExecuteQuery.Text = Program.resourceManager.GetString("QUERY_EXECUTE", Program.CultureInfo);
+      rbtnRemoveQuery.Text = Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo);
+      rbtnRemoveAllQueries.Text = Program.resourceManager.GetString("QUERY_REMOVE_ALL", Program.CultureInfo);
+      rbtnAddConnection.Text = Program.resourceManager.GetString("CONNECTION_ADD", Program.CultureInfo);
+      rbtnAddQuery.Text = Program.resourceManager.GetString("QUERY_ADD", Program.CultureInfo);
+      rbtnZoomFull.Text = Program.resourceManager.GetString("VIEW_ZOOM_FULL", Program.CultureInfo);
+
+      if (this.SwitchLanguage != null)
+      {
+        SwitchLanguage(this, new SwitchLanguageEventArgs(Program.CultureInfo));
+      }
+
+      this.Refresh();
+    }
+  }
+
+  public class SwitchLanguageEventArgs : EventArgs
+  {
+    public CultureInfo CultureInfo { get; set; }
+    public SwitchLanguageEventArgs(CultureInfo CultureInfo)
+    {
+      this.CultureInfo = CultureInfo;
+    }
   }
 }

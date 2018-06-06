@@ -46,15 +46,15 @@ namespace System.Windows.Forms
 
     private void ContextMenuStripOnItemClickStart(object sender, ToolStripItemClickedEventArgs toolStripItemClickedEventArgs)
     {
-      switch (toolStripItemClickedEventArgs.ClickedItem.Text)
+      if (toolStripItemClickedEventArgs.ClickedItem.Text == Program.resourceManager.GetString("PROPERTIES", Program.CultureInfo))
       {
-        case "Verbinding":
-          EditProperties();
-          break;
-        case "Verwijderen":
-          this.Remove();
-          break;
+        this.EditProperties();
       }
+      if (toolStripItemClickedEventArgs.ClickedItem.Text == Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo))
+      {
+        this.Remove();
+      }
+
     }
 
     public void EditProperties()
@@ -74,14 +74,17 @@ namespace System.Windows.Forms
       var strip = sender as TreeNodeContextMenu;
       if (strip != null)
       {
+        strip.Properties.Text = Program.resourceManager.GetString("PROPERTIES", Program.CultureInfo);
+        strip.Remove.Text = Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo);
+
         strip.Remove.Enabled = this.Nodes.Count == 0;
       }
     }
 
     private class TreeNodeContextMenu : MaterialContextMenuStrip
     {
-      public readonly ToolStripItem Properties = new MaterialToolStripMenuItem { Text = "Verbinding" };
-      public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = "Verwijderen" };
+      public readonly ToolStripItem Properties = new MaterialToolStripMenuItem { Text = Program.resourceManager.GetString("PROPERTIES", Program.CultureInfo) };
+      public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo) };
       public TreeNodeContextMenu()
       {
         Items.AddRange(new[] { Properties, Remove });

@@ -23,7 +23,7 @@ from &#xD;
 where &#xD;
   classificatie = 2&#xD;
 </SQL>
-          <FillColor>Silver</FillColor>
+          <FillColor>Olive</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
@@ -50,10 +50,24 @@ where &#xD;
         </Query>
         <Query>
           <Name>Totaal - Pand contouren</Name>
-          <SQL>select st_astext(&#xD;
-  (st_dump((st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)))).geom&#xD;
-  )</SQL>
-          <FillColor>#FF8000</FillColor>
+          <SQL>select &#xD;
+  st_AsText(   ST_Force3D( ST_ExteriorRing(  p.geom  ))   )&#xD;
+from &#xD;
+  pand p&#xD;
+&#xD;
+</SQL>
+          <FillColor>#8080FF</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>Totaal - Pand Extrude 3D</Name>
+          <SQL>select &#xD;
+  st_AsText(   (st_dump(( st_extrude(ST_ExteriorRing(  p.geom  ), 0, 0, 10   )))).geom    )&#xD;
+from &#xD;
+  pand p&#xD;
+&#xD;
+</SQL>
+          <FillColor>#FF0080</FillColor>
           <Outline>true</Outline>
         </Query>
         <Query>
@@ -129,7 +143,7 @@ where &#xD;
           <Outline>true</Outline>
         </Query>
         <Query>
-          <Name>Pand - Maaiveld #1</Name>
+          <Name>Pand - Maaiveld #1 (slow)</Name>
           <SQL>select  &#xD;
   st_AsText(   (st_dump(ST_DelaunayTriangles(st_collect( m.geom ), 2))).geom   )&#xD;
 from &#xD;
@@ -141,13 +155,13 @@ and&#xD;
   identificatie = '1722100000003767'&#xD;
 and&#xD;
   classificatie = 2</SQL>
-          <FillColor>#408080</FillColor>
+          <FillColor>#FF8000</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
-          <Name>Pand - Maaiveld #2</Name>
+          <Name>Pand - Maaiveld #2 (fast)</Name>
           <SQL>select  &#xD;
-  st_AsText(   (st_dump(ST_DelaunayTriangles(st_collect( m.geom ), 2))).geom   )&#xD;
+  st_AsText(   (st_dump(ST_DelaunayTriangles(st_collect( m.geom ), 0.1))).geom   )&#xD;
 from &#xD;
   ahn_sample m&#xD;
 where &#xD;
@@ -158,7 +172,7 @@ where &#xD;
 and&#xD;
   classificatie = 2&#xD;
 </SQL>
-          <FillColor>Silver</FillColor>
+          <FillColor>#80FF00</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>

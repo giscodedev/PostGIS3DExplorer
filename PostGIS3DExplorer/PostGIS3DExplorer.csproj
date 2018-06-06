@@ -79,6 +79,22 @@
     <Reference Include="ThemeColorPicker, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQuery.Designer.cs">
+      <DependentUpon>FrmQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Res.en.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Res.en.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Res.nl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Res.nl.resx</DependentUpon>
+    </Compile>
     <Compile Include="TreeNodes\ConnectionTreeNode.cs" />
     <Compile Include="DBHelper.cs" />
     <Compile Include="DragDropReorderTreeView.cs">
@@ -128,6 +144,9 @@
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmQuery.resx">
+      <DependentUpon>FrmQuery.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MaterialMessageBox.resx">
       <DependentUpon>MaterialMessageBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,6 +160,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Resources\Res.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Res.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Res.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Res.nl.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SQLEditorControl.resx">
       <DependentUpon>SQLEditorControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -76,24 +76,25 @@ namespace System.Windows.Forms
       this.ContextMenuStrip.Hide();
       Application.DoEvents();
 
-      switch (toolStripItemClickedEventArgs.ClickedItem.Text)
+      if (toolStripItemClickedEventArgs.ClickedItem.Text == Program.resourceManager.GetString("QUERY_EXECUTE", Program.CultureInfo))
       {
-        case "Uitvoeren":
-          this.Execute();
-          break;
-        case "Verwijderen":
-          this.RemoveWithCleanup();
-          break;
+        this.Execute();
       }
+      if (toolStripItemClickedEventArgs.ClickedItem.Text == Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo))
+      {
+        this.RemoveWithCleanup();
+      }
+
     }
 
     private void ContextMenuStripOnOpening(object sender, CancelEventArgs cancelEventArgs)
     {
-      //var strip = sender as TreeNodeContextMenu;
-      //if (strip != null)
-      //{
-      //  strip.Copy.Enabled = !string.IsNullOrEmpty(this.Text);
-      //}
+      var strip = sender as TreeNodeContextMenu;
+      if (strip != null)
+      {
+        strip.Execute.Text = Program.resourceManager.GetString("QUERY_EXECUTE", Program.CultureInfo);
+        strip.Remove.Text = Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo);
+      }
     }
 
     public string Naam
@@ -333,8 +334,8 @@ namespace System.Windows.Forms
 
     private class TreeNodeContextMenu : MaterialContextMenuStrip
     {
-      public readonly ToolStripItem Execute = new MaterialToolStripMenuItem { Text = "Uitvoeren" };
-      public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = "Verwijderen" };
+      public readonly ToolStripItem Execute = new MaterialToolStripMenuItem { Text = Program.resourceManager.GetString("QUERY_EXECUTE", Program.CultureInfo) };
+      public readonly ToolStripItem Remove = new MaterialToolStripMenuItem { Text = Program.resourceManager.GetString("QUERY_REMOVE", Program.CultureInfo) };
       public TreeNodeContextMenu()
       {
         Items.AddRange(new[] { Execute, Remove });

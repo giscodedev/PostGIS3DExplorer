@@ -34,31 +34,33 @@
       this.advancedTreeView1 = new MaterialSkin.Controls.AdvancedTreeView();
       this.imageList1 = new System.Windows.Forms.ImageList(this.components);
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+      this.renderWindowControl1 = new Kitware.VTK.RenderWindowControl();
       this.SqlContainerPanel = new System.Windows.Forms.Panel();
       this.ribbon1 = new System.Windows.Forms.Ribbon();
       this.ribbonTab1 = new System.Windows.Forms.RibbonTab();
-      this.ribbonPanel2 = new System.Windows.Forms.RibbonPanel();
+      this.panelProject = new System.Windows.Forms.RibbonPanel();
       this.rbtnSave = new System.Windows.Forms.RibbonButton();
       this.rbtnSaveAs = new System.Windows.Forms.RibbonButton();
       this.rbtnLoad = new System.Windows.Forms.RibbonButton();
-      this.ribbonSeparator1 = new System.Windows.Forms.RibbonSeparator();
+      this.panelQuery = new System.Windows.Forms.RibbonPanel();
       this.rbtnExecuteQuery = new System.Windows.Forms.RibbonButton();
       this.rbtnRemoveQuery = new System.Windows.Forms.RibbonButton();
-      this.rbnRemoveAllQueries = new System.Windows.Forms.RibbonButton();
-      this.ribbonPanel1 = new System.Windows.Forms.RibbonPanel();
-      this.rbnAddConnection = new System.Windows.Forms.RibbonButton();
-      this.rbnAddQuery = new System.Windows.Forms.RibbonButton();
-      this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
+      this.rbtnRemoveAllQueries = new System.Windows.Forms.RibbonButton();
+      this.rbtnAddConnection = new System.Windows.Forms.RibbonButton();
+      this.rbtnAddQuery = new System.Windows.Forms.RibbonButton();
+      this.panel3D = new System.Windows.Forms.RibbonPanel();
       this.rbtnZoomFull = new System.Windows.Forms.RibbonButton();
-      this.ribbonPanel3 = new System.Windows.Forms.RibbonPanel();
+      this.panelDemo = new System.Windows.Forms.RibbonPanel();
       this.rbtnDemoData = new System.Windows.Forms.RibbonButton();
       this.rbtnDemoProject = new System.Windows.Forms.RibbonButton();
       this.rbtnLoadDemoProject1 = new System.Windows.Forms.RibbonButton();
       this.rbtnLoadDemoProject2 = new System.Windows.Forms.RibbonButton();
+      this.panelUI = new System.Windows.Forms.RibbonPanel();
+      this.rbtnNL = new System.Windows.Forms.RibbonButton();
+      this.rbtnEN = new System.Windows.Forms.RibbonButton();
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
       this.mainControlsPanel = new System.Windows.Forms.Panel();
-      this.renderWindowControl1 = new Kitware.VTK.RenderWindowControl();
       ((System.ComponentModel.ISupportInitialize)(this.split3D_sql)).BeginInit();
       this.split3D_sql.Panel1.SuspendLayout();
       this.split3D_sql.Panel2.SuspendLayout();
@@ -137,6 +139,18 @@
       this.splitContainer1.SplitterDistance = 510;
       this.splitContainer1.TabIndex = 82;
       // 
+      // renderWindowControl1
+      // 
+      this.renderWindowControl1.AddTestActors = false;
+      this.renderWindowControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.renderWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.renderWindowControl1.Location = new System.Drawing.Point(0, 0);
+      this.renderWindowControl1.Name = "renderWindowControl1";
+      this.renderWindowControl1.Size = new System.Drawing.Size(1079, 510);
+      this.renderWindowControl1.TabIndex = 82;
+      this.renderWindowControl1.TestText = null;
+      this.renderWindowControl1.Load += new System.EventHandler(this.renderWindowControl1_Load);
+      // 
       // SqlContainerPanel
       // 
       this.SqlContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -179,22 +193,19 @@
       // 
       // ribbonTab1
       // 
-      this.ribbonTab1.Panels.Add(this.ribbonPanel2);
-      this.ribbonTab1.Panels.Add(this.ribbonPanel1);
-      this.ribbonTab1.Panels.Add(this.ribbonPanel4);
-      this.ribbonTab1.Panels.Add(this.ribbonPanel3);
+      this.ribbonTab1.Panels.Add(this.panelProject);
+      this.ribbonTab1.Panels.Add(this.panelQuery);
+      this.ribbonTab1.Panels.Add(this.panel3D);
+      this.ribbonTab1.Panels.Add(this.panelDemo);
+      this.ribbonTab1.Panels.Add(this.panelUI);
       this.ribbonTab1.Text = "Start";
       // 
-      // ribbonPanel2
+      // panelProject
       // 
-      this.ribbonPanel2.Items.Add(this.rbtnSave);
-      this.ribbonPanel2.Items.Add(this.rbtnSaveAs);
-      this.ribbonPanel2.Items.Add(this.rbtnLoad);
-      this.ribbonPanel2.Items.Add(this.ribbonSeparator1);
-      this.ribbonPanel2.Items.Add(this.rbtnExecuteQuery);
-      this.ribbonPanel2.Items.Add(this.rbtnRemoveQuery);
-      this.ribbonPanel2.Items.Add(this.rbnRemoveAllQueries);
-      this.ribbonPanel2.Text = "Project";
+      this.panelProject.Items.Add(this.rbtnSave);
+      this.panelProject.Items.Add(this.rbtnSaveAs);
+      this.panelProject.Items.Add(this.rbtnLoad);
+      this.panelProject.Text = "Project";
       // 
       // rbtnSave
       // 
@@ -220,6 +231,15 @@
       this.rbtnLoad.Text = "Laden";
       this.rbtnLoad.Click += new System.EventHandler(this.rbtnLoad_Click);
       // 
+      // panelQuery
+      // 
+      this.panelQuery.Items.Add(this.rbtnExecuteQuery);
+      this.panelQuery.Items.Add(this.rbtnRemoveQuery);
+      this.panelQuery.Items.Add(this.rbtnRemoveAllQueries);
+      this.panelQuery.Items.Add(this.rbtnAddConnection);
+      this.panelQuery.Items.Add(this.rbtnAddQuery);
+      this.panelQuery.Text = "Database";
+      // 
       // rbtnExecuteQuery
       // 
       this.rbtnExecuteQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbtnExecuteQuery.Image")));
@@ -233,44 +253,38 @@
       this.rbtnRemoveQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveQuery.Image")));
       this.rbtnRemoveQuery.MinimumSize = new System.Drawing.Size(95, 0);
       this.rbtnRemoveQuery.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveQuery.SmallImage")));
-      this.rbtnRemoveQuery.Text = "Wissen";
+      this.rbtnRemoveQuery.Text = "Verwijderen";
       this.rbtnRemoveQuery.Click += new System.EventHandler(this.rbtnRemoveQuery_Click);
       // 
-      // rbnRemoveAllQueries
+      // rbtnRemoveAllQueries
       // 
-      this.rbnRemoveAllQueries.Image = ((System.Drawing.Image)(resources.GetObject("rbnRemoveAllQueries.Image")));
-      this.rbnRemoveAllQueries.MinimumSize = new System.Drawing.Size(95, 0);
-      this.rbnRemoveAllQueries.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbnRemoveAllQueries.SmallImage")));
-      this.rbnRemoveAllQueries.Text = "Alles wissen";
-      this.rbnRemoveAllQueries.Click += new System.EventHandler(this.RemoveAllQueries_Click);
+      this.rbtnRemoveAllQueries.Image = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveAllQueries.Image")));
+      this.rbtnRemoveAllQueries.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnRemoveAllQueries.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnRemoveAllQueries.SmallImage")));
+      this.rbtnRemoveAllQueries.Text = "Alles wissen";
+      this.rbtnRemoveAllQueries.Click += new System.EventHandler(this.RemoveAllQueries_Click);
       // 
-      // ribbonPanel1
+      // rbtnAddConnection
       // 
-      this.ribbonPanel1.Items.Add(this.rbnAddConnection);
-      this.ribbonPanel1.Items.Add(this.rbnAddQuery);
-      this.ribbonPanel1.Text = "Algemeen";
+      this.rbtnAddConnection.Image = ((System.Drawing.Image)(resources.GetObject("rbtnAddConnection.Image")));
+      this.rbtnAddConnection.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnAddConnection.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnAddConnection.SmallImage")));
+      this.rbtnAddConnection.Text = "+ Connectie";
+      this.rbtnAddConnection.ToolTip = "Nieuwe connectie toevoegen";
+      this.rbtnAddConnection.Click += new System.EventHandler(this.rbnAddConnection_Click);
       // 
-      // rbnAddConnection
+      // rbtnAddQuery
       // 
-      this.rbnAddConnection.Image = ((System.Drawing.Image)(resources.GetObject("rbnAddConnection.Image")));
-      this.rbnAddConnection.MinimumSize = new System.Drawing.Size(95, 0);
-      this.rbnAddConnection.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbnAddConnection.SmallImage")));
-      this.rbnAddConnection.Text = "+ Connectie";
-      this.rbnAddConnection.ToolTip = "Nieuwe connectie toevoegen";
-      this.rbnAddConnection.Click += new System.EventHandler(this.rbnAddConnection_Click);
+      this.rbtnAddQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbtnAddQuery.Image")));
+      this.rbtnAddQuery.MinimumSize = new System.Drawing.Size(95, 0);
+      this.rbtnAddQuery.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnAddQuery.SmallImage")));
+      this.rbtnAddQuery.Text = "+ Vraag";
+      this.rbtnAddQuery.Click += new System.EventHandler(this.rbnAddQuery_Click);
       // 
-      // rbnAddQuery
+      // panel3D
       // 
-      this.rbnAddQuery.Image = ((System.Drawing.Image)(resources.GetObject("rbnAddQuery.Image")));
-      this.rbnAddQuery.MinimumSize = new System.Drawing.Size(95, 0);
-      this.rbnAddQuery.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbnAddQuery.SmallImage")));
-      this.rbnAddQuery.Text = "+ Query";
-      this.rbnAddQuery.Click += new System.EventHandler(this.rbnAddQuery_Click);
-      // 
-      // ribbonPanel4
-      // 
-      this.ribbonPanel4.Items.Add(this.rbtnZoomFull);
-      this.ribbonPanel4.Text = "3D";
+      this.panel3D.Items.Add(this.rbtnZoomFull);
+      this.panel3D.Text = "3D View";
       // 
       // rbtnZoomFull
       // 
@@ -280,11 +294,11 @@
       this.rbtnZoomFull.Text = "Uitzoomen";
       this.rbtnZoomFull.Click += new System.EventHandler(this.rbtnZoomFull_Click);
       // 
-      // ribbonPanel3
+      // panelDemo
       // 
-      this.ribbonPanel3.Items.Add(this.rbtnDemoData);
-      this.ribbonPanel3.Items.Add(this.rbtnDemoProject);
-      this.ribbonPanel3.Text = "Demo";
+      this.panelDemo.Items.Add(this.rbtnDemoData);
+      this.panelDemo.Items.Add(this.rbtnDemoProject);
+      this.panelDemo.Text = "Demo";
       // 
       // rbtnDemoData
       // 
@@ -322,6 +336,28 @@
       this.rbtnLoadDemoProject2.Text = "Demo project 2 - AHN en BAG";
       this.rbtnLoadDemoProject2.Click += new System.EventHandler(this.rbtnLoadDemoProject2_Click);
       // 
+      // panelUI
+      // 
+      this.panelUI.Items.Add(this.rbtnNL);
+      this.panelUI.Items.Add(this.rbtnEN);
+      this.panelUI.Text = "UI";
+      // 
+      // rbtnNL
+      // 
+      this.rbtnNL.Image = ((System.Drawing.Image)(resources.GetObject("rbtnNL.Image")));
+      this.rbtnNL.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
+      this.rbtnNL.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnNL.SmallImage")));
+      this.rbtnNL.Text = "Nederlands";
+      this.rbtnNL.Click += new System.EventHandler(this.rbtnSwitchLanguage_Click);
+      // 
+      // rbtnEN
+      // 
+      this.rbtnEN.Image = ((System.Drawing.Image)(resources.GetObject("rbtnEN.Image")));
+      this.rbtnEN.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
+      this.rbtnEN.SmallImage = ((System.Drawing.Image)(resources.GetObject("rbtnEN.SmallImage")));
+      this.rbtnEN.Text = "English";
+      this.rbtnEN.Click += new System.EventHandler(this.rbtnSwitchLanguage_Click);
+      // 
       // openFileDialog1
       // 
       this.openFileDialog1.FileName = "openFileDialog1";
@@ -337,18 +373,6 @@
       this.mainControlsPanel.Name = "mainControlsPanel";
       this.mainControlsPanel.Size = new System.Drawing.Size(1426, 953);
       this.mainControlsPanel.TabIndex = 85;
-      // 
-      // renderWindowControl1
-      // 
-      this.renderWindowControl1.AddTestActors = false;
-      this.renderWindowControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.renderWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.renderWindowControl1.Location = new System.Drawing.Point(0, 0);
-      this.renderWindowControl1.Name = "renderWindowControl1";
-      this.renderWindowControl1.Size = new System.Drawing.Size(1079, 510);
-      this.renderWindowControl1.TabIndex = 82;
-      this.renderWindowControl1.TestText = null;
-      this.renderWindowControl1.Load += new System.EventHandler(this.renderWindowControl1_Load);
       // 
       // FrmMain
       // 
@@ -381,29 +405,31 @@
     private System.Windows.Forms.SplitContainer split3D_sql;
     private System.Windows.Forms.Ribbon ribbon1;
     private System.Windows.Forms.RibbonTab ribbonTab1;
-    private System.Windows.Forms.RibbonPanel ribbonPanel1;
-    private System.Windows.Forms.RibbonButton rbnAddConnection;
+    private System.Windows.Forms.RibbonPanel panelQuery;
+    private System.Windows.Forms.RibbonButton rbtnAddConnection;
     private MaterialSkin.Controls.AdvancedTreeView advancedTreeView1;
     private System.Windows.Forms.ImageList imageList1;
     private System.Windows.Forms.Panel mainControlsPanel;
     private System.Windows.Forms.Panel SqlContainerPanel;
-    private System.Windows.Forms.RibbonButton rbnRemoveAllQueries;
-    private System.Windows.Forms.RibbonButton rbnAddQuery;
-    private System.Windows.Forms.RibbonSeparator ribbonSeparator1;
-    private System.Windows.Forms.RibbonPanel ribbonPanel2;
+    private System.Windows.Forms.RibbonButton rbtnRemoveAllQueries;
+    private System.Windows.Forms.RibbonButton rbtnAddQuery;
+    private System.Windows.Forms.RibbonPanel panelProject;
     private System.Windows.Forms.RibbonButton rbtnSave;
     private System.Windows.Forms.RibbonButton rbtnLoad;
     private System.Windows.Forms.RibbonButton rbtnSaveAs;
-    private System.Windows.Forms.RibbonPanel ribbonPanel3;
+    private System.Windows.Forms.RibbonPanel panelDemo;
     private System.Windows.Forms.RibbonButton rbtnDemoData;
     private System.Windows.Forms.RibbonButton rbtnDemoProject;
     private System.Windows.Forms.RibbonButton rbtnLoadDemoProject1;
     private System.Windows.Forms.RibbonButton rbtnLoadDemoProject2;
-    private System.Windows.Forms.RibbonPanel ribbonPanel4;
+    private System.Windows.Forms.RibbonPanel panel3D;
     private System.Windows.Forms.RibbonButton rbtnZoomFull;
     private System.Windows.Forms.RibbonButton rbtnExecuteQuery;
     private System.Windows.Forms.RibbonButton rbtnRemoveQuery;
     private Kitware.VTK.RenderWindowControl renderWindowControl1;
+    private System.Windows.Forms.RibbonPanel panelUI;
+    private System.Windows.Forms.RibbonButton rbtnNL;
+    private System.Windows.Forms.RibbonButton rbtnEN;
   }
 }
 

@@ -30,19 +30,19 @@
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConnection));
       this.txtLoginPassword = new MaterialSkin.Controls.MaterialSingleLineTextField();
-      this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
+      this.lblPassword = new MaterialSkin.Controls.MaterialLabel();
       this.txtLoginName = new MaterialSkin.Controls.MaterialSingleLineTextField();
-      this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+      this.lblUserName = new MaterialSkin.Controls.MaterialLabel();
       this.txtLoginDatabase = new MaterialSkin.Controls.MaterialSingleLineTextField();
       this.txtLoginPort = new MaterialSkin.Controls.MaterialSingleLineTextField();
       this.txtLoginServer = new MaterialSkin.Controls.MaterialSingleLineTextField();
-      this.materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
-      this.materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
-      this.materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
+      this.lblDatabase = new MaterialSkin.Controls.MaterialLabel();
+      this.lblPort = new MaterialSkin.Controls.MaterialLabel();
+      this.lblServer = new MaterialSkin.Controls.MaterialLabel();
       this.btnLogin = new MaterialSkin.Controls.MaterialRaisedButton();
       this.lblLoginStatus = new MaterialSkin.Controls.MaterialLabel();
       this.btnLoginTest = new MaterialSkin.Controls.MaterialFlatButton();
-      this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+      this.lblName = new MaterialSkin.Controls.MaterialLabel();
       this.txtName = new MaterialSkin.Controls.MaterialSingleLineTextField();
       this.lblExtension1 = new MaterialSkin.Controls.MaterialLabel();
       this.lblExtension2 = new MaterialSkin.Controls.MaterialLabel();
@@ -70,18 +70,18 @@
       this.txtLoginPassword.Text = "postgres";
       this.txtLoginPassword.UseSystemPasswordChar = true;
       // 
-      // materialLabel2
+      // lblPassword
       // 
-      this.materialLabel2.AutoSize = true;
-      this.materialLabel2.Depth = 0;
-      this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel2.Location = new System.Drawing.Point(26, 162);
-      this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel2.Name = "materialLabel2";
-      this.materialLabel2.Size = new System.Drawing.Size(93, 19);
-      this.materialLabel2.TabIndex = 6;
-      this.materialLabel2.Text = "Wachtwoord";
+      this.lblPassword.AutoSize = true;
+      this.lblPassword.Depth = 0;
+      this.lblPassword.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblPassword.Location = new System.Drawing.Point(26, 162);
+      this.lblPassword.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblPassword.Name = "lblPassword";
+      this.lblPassword.Size = new System.Drawing.Size(93, 19);
+      this.lblPassword.TabIndex = 6;
+      this.lblPassword.Text = "Wachtwoord";
       // 
       // txtLoginName
       // 
@@ -101,18 +101,18 @@
       this.txtLoginName.Text = "postgres";
       this.txtLoginName.UseSystemPasswordChar = false;
       // 
-      // materialLabel1
+      // lblUserName
       // 
-      this.materialLabel1.AutoSize = true;
-      this.materialLabel1.Depth = 0;
-      this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel1.Location = new System.Drawing.Point(26, 129);
-      this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel1.Name = "materialLabel1";
-      this.materialLabel1.Size = new System.Drawing.Size(110, 19);
-      this.materialLabel1.TabIndex = 4;
-      this.materialLabel1.Text = "Gebruikernaam";
+      this.lblUserName.AutoSize = true;
+      this.lblUserName.Depth = 0;
+      this.lblUserName.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblUserName.Location = new System.Drawing.Point(26, 129);
+      this.lblUserName.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblUserName.Name = "lblUserName";
+      this.lblUserName.Size = new System.Drawing.Size(110, 19);
+      this.lblUserName.TabIndex = 4;
+      this.lblUserName.Text = "Gebruikernaam";
       // 
       // txtLoginDatabase
       // 
@@ -168,44 +168,44 @@
       this.txtLoginServer.Text = "localhost";
       this.txtLoginServer.UseSystemPasswordChar = false;
       // 
-      // materialLabel6
+      // lblDatabase
       // 
-      this.materialLabel6.AutoSize = true;
-      this.materialLabel6.Depth = 0;
-      this.materialLabel6.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel6.Location = new System.Drawing.Point(26, 261);
-      this.materialLabel6.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel6.Name = "materialLabel6";
-      this.materialLabel6.Size = new System.Drawing.Size(72, 19);
-      this.materialLabel6.TabIndex = 10;
-      this.materialLabel6.Text = "Database";
+      this.lblDatabase.AutoSize = true;
+      this.lblDatabase.Depth = 0;
+      this.lblDatabase.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblDatabase.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblDatabase.Location = new System.Drawing.Point(26, 261);
+      this.lblDatabase.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblDatabase.Name = "lblDatabase";
+      this.lblDatabase.Size = new System.Drawing.Size(72, 19);
+      this.lblDatabase.TabIndex = 10;
+      this.lblDatabase.Text = "Database";
       // 
-      // materialLabel5
+      // lblPort
       // 
-      this.materialLabel5.AutoSize = true;
-      this.materialLabel5.Depth = 0;
-      this.materialLabel5.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel5.Location = new System.Drawing.Point(26, 228);
-      this.materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel5.Name = "materialLabel5";
-      this.materialLabel5.Size = new System.Drawing.Size(46, 19);
-      this.materialLabel5.TabIndex = 9;
-      this.materialLabel5.Text = "Poort";
+      this.lblPort.AutoSize = true;
+      this.lblPort.Depth = 0;
+      this.lblPort.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblPort.Location = new System.Drawing.Point(26, 228);
+      this.lblPort.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblPort.Name = "lblPort";
+      this.lblPort.Size = new System.Drawing.Size(46, 19);
+      this.lblPort.TabIndex = 9;
+      this.lblPort.Text = "Poort";
       // 
-      // materialLabel4
+      // lblServer
       // 
-      this.materialLabel4.AutoSize = true;
-      this.materialLabel4.Depth = 0;
-      this.materialLabel4.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel4.Location = new System.Drawing.Point(26, 195);
-      this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel4.Name = "materialLabel4";
-      this.materialLabel4.Size = new System.Drawing.Size(51, 19);
-      this.materialLabel4.TabIndex = 8;
-      this.materialLabel4.Text = "Server";
+      this.lblServer.AutoSize = true;
+      this.lblServer.Depth = 0;
+      this.lblServer.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblServer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblServer.Location = new System.Drawing.Point(26, 195);
+      this.lblServer.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblServer.Name = "lblServer";
+      this.lblServer.Size = new System.Drawing.Size(51, 19);
+      this.lblServer.TabIndex = 8;
+      this.lblServer.Text = "Server";
       // 
       // btnLogin
       // 
@@ -253,18 +253,18 @@
       this.btnLoginTest.UseVisualStyleBackColor = true;
       this.btnLoginTest.Click += new System.EventHandler(this.btnLoginTest_Click);
       // 
-      // materialLabel3
+      // lblName
       // 
-      this.materialLabel3.AutoSize = true;
-      this.materialLabel3.Depth = 0;
-      this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
-      this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-      this.materialLabel3.Location = new System.Drawing.Point(26, 96);
-      this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
-      this.materialLabel3.Name = "materialLabel3";
-      this.materialLabel3.Size = new System.Drawing.Size(118, 19);
-      this.materialLabel3.TabIndex = 4;
-      this.materialLabel3.Text = "Connectie naam";
+      this.lblName.AutoSize = true;
+      this.lblName.Depth = 0;
+      this.lblName.Font = new System.Drawing.Font("Roboto", 11F);
+      this.lblName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.lblName.Location = new System.Drawing.Point(26, 96);
+      this.lblName.MouseState = MaterialSkin.MouseState.HOVER;
+      this.lblName.Name = "lblName";
+      this.lblName.Size = new System.Drawing.Size(118, 19);
+      this.lblName.TabIndex = 4;
+      this.lblName.Text = "Connectie naam";
       // 
       // txtName
       // 
@@ -350,14 +350,14 @@
       this.Controls.Add(this.btnLoginTest);
       this.Controls.Add(this.txtLoginPort);
       this.Controls.Add(this.txtLoginServer);
-      this.Controls.Add(this.materialLabel6);
-      this.Controls.Add(this.materialLabel2);
-      this.Controls.Add(this.materialLabel5);
+      this.Controls.Add(this.lblDatabase);
+      this.Controls.Add(this.lblPassword);
+      this.Controls.Add(this.lblPort);
       this.Controls.Add(this.txtName);
       this.Controls.Add(this.txtLoginName);
-      this.Controls.Add(this.materialLabel3);
-      this.Controls.Add(this.materialLabel4);
-      this.Controls.Add(this.materialLabel1);
+      this.Controls.Add(this.lblName);
+      this.Controls.Add(this.lblServer);
+      this.Controls.Add(this.lblUserName);
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "FrmConnection";
@@ -376,19 +376,19 @@
     #endregion
 
     private MaterialSkin.Controls.MaterialSingleLineTextField txtLoginPassword;
-    private MaterialSkin.Controls.MaterialLabel materialLabel2;
+    private MaterialSkin.Controls.MaterialLabel lblPassword;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtLoginName;
-    private MaterialSkin.Controls.MaterialLabel materialLabel1;
+    private MaterialSkin.Controls.MaterialLabel lblUserName;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtLoginDatabase;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtLoginPort;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtLoginServer;
-    private MaterialSkin.Controls.MaterialLabel materialLabel6;
-    private MaterialSkin.Controls.MaterialLabel materialLabel5;
-    private MaterialSkin.Controls.MaterialLabel materialLabel4;
+    private MaterialSkin.Controls.MaterialLabel lblDatabase;
+    private MaterialSkin.Controls.MaterialLabel lblPort;
+    private MaterialSkin.Controls.MaterialLabel lblServer;
     private MaterialSkin.Controls.MaterialRaisedButton btnLogin;
     private MaterialSkin.Controls.MaterialLabel lblLoginStatus;
     private MaterialSkin.Controls.MaterialFlatButton btnLoginTest;
-    private MaterialSkin.Controls.MaterialLabel materialLabel3;
+    private MaterialSkin.Controls.MaterialLabel lblName;
     private MaterialSkin.Controls.MaterialSingleLineTextField txtName;
     private MaterialSkin.Controls.MaterialLabel lblExtension1;
     private MaterialSkin.Controls.MaterialLabel lblExtension2;

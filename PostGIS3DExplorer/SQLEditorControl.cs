@@ -11,6 +11,8 @@ using FastColoredTextBoxNS;
 using Kitware.VTK;
 using System.Globalization;
 using MaterialSkin.Controls;
+using System.Threading;
+using Npgsql;
 
 namespace PostGIS3DExplorer
 {
@@ -50,6 +52,35 @@ namespace PostGIS3DExplorer
       this.ribbon1.RibbonTabFont = Program.materialSkinManager.ROBOTO_MEDIUM_10;
     }
 
+
+    private void SQLEditorControl_Load(object sender, EventArgs e)
+    {
+      if (this.ParentForm != null)
+      {
+        if (this.ParentForm is FrmMain)
+        {
+          FrmMain pFrmMain = this.ParentForm as FrmMain;
+          pFrmMain.SwitchLanguage += new EventHandler(this.SwitchLanguage);
+        }
+      }
+    }
+
+    private void SwitchLanguage(object sender, EventArgs e)
+    {
+      SwitchLanguageEventArgs pSwitchLanguageEventArgs = e as SwitchLanguageEventArgs;
+
+      rbtnExecute.Text = Program.resourceManager.GetString("QUERY_EXECUTE", pSwitchLanguageEventArgs.CultureInfo);
+      rbtnDelete.Text = Program.resourceManager.GetString("QUERY_REMOVE", pSwitchLanguageEventArgs.CultureInfo);
+      rbtnOutline.Text = Program.resourceManager.GetString("QUERY_OUTLINE", pSwitchLanguageEventArgs.CultureInfo);
+      rbtnFillColor.Text = Program.resourceManager.GetString("QUERY_FILLCOLOR", pSwitchLanguageEventArgs.CultureInfo);
+
+    }
+
+    public FrmMain FrmMain
+    {
+      get; set;
+    }
+
     public Color FillColor
     {
       get { return rbtnFillColor.Color; }
@@ -74,207 +105,264 @@ namespace PostGIS3DExplorer
       vtkPolygon pvtkPolygon = null;
       vtkPolyLine pvtkPolyLine = null;
       vtkPoints pvtkPoints = null;
-      vtkPointSource pvtkPointSource = null;
       vtkCellArray pvtkCellArray = null;
       vtkIdList pvtkIdList = null;
 
-      DBHelper pDBHelper = new DBHelper(m_pPostGISConnectionParams);
+      //// Color by RGB per point (works for meshes and points!)
+      // https://www.vtk.org/Wiki/VTK/Examples/CSharp/Meshes/Color_a_mesh_by_height 
+      //vtkUnsignedCharArray rgb = null;
 
       try
       {
-
-        DataTable p3DDataTable = pDBHelper.GetDataTable(sSQL, "3D_objects", false);
-        string sLine = "";
-
-        int iRow = 0;
-        foreach (DataRow pRow in p3DDataTable.Rows)
+        DataTable p3DDataTable = null;
+        FrmQuery pFrmQuery = new FrmQuery();
+        pFrmQuery.SQL = fastColoredTextBox1.Text;
+        pFrmQuery.PostGISConnectionParams = m_pPostGISConnectionParams;
+        if (pFrmQuery.ShowDialog(this.ParentForm) == DialogResult.OK)
         {
-          sLine = pRow[0].ToString();
-          if (sLine.StartsWith("POLYGON Z") || sLine.StartsWith("TRIANGLE Z"))
-          {
-            if (pvtkAppendPolyData == null)
-            {
-              actorType = ActorType.Polygon;
-              pvtkAppendPolyData = vtkAppendPolyData.New();
-            }
-            sLine = sLine.Replace("TRIANGLE Z ((", "");
-            sLine = sLine.Replace("POLYGON Z ((", "");
-            sLine = sLine.Replace("))", "");
-            sLine = sLine.Replace("),(", "");
+          p3DDataTable = pFrmQuery.DataTable;
+        }
+       
+        if (p3DDataTable != null)
+        {
+          prgMain.Minimum = 0;
+          prgMain.Maximum = 100;
+          prgMain.Value = prgMain.Minimum;
+          Application.DoEvents();
 
-            pvtkPoints = vtkPoints.New();
-            pvtkPolygon = vtkPolygon.New();
-            try
+          string sLine = "";
+
+          int iRow = 0;
+          foreach (DataRow pRow in p3DDataTable.Rows)
+          {
+            sLine = pRow[0].ToString();
+            if (sLine.StartsWith("POLYGON Z") || sLine.StartsWith("TRIANGLE Z"))
             {
-              string[] sCoOrdinates = sLine.Split(',');
-              for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+              //// Color by RGB per point
+              //rgb = vtkUnsignedCharArray.New();
+              //rgb.SetNumberOfComponents(3);
+              //rgb.SetName("Color");
+
+              if (pvtkAppendPolyData == null)
               {
-                string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
-                if (sOrdinates.Length == 3) // Expect x,y,z
-                {
-                  double x = double.Parse(sOrdinates[0], pEnUs);
-                  double y = double.Parse(sOrdinates[1], pEnUs);
-                  double z = double.Parse(sOrdinates[2], pEnUs);
-                  pvtkPoints.InsertNextPoint(x, y, z);
-                }
-                pvtkPolygon.GetPointIds().InsertId(iPoint, iPoint);
+                actorType = ActorType.Polygon;
+                pvtkAppendPolyData = vtkAppendPolyData.New();
               }
-            }
-            catch (Exception ex)
-            {
+              sLine = sLine.Replace("TRIANGLE Z ((", "");
+              sLine = sLine.Replace("POLYGON Z ((", "");
+              sLine = sLine.Replace("))", "");
+              sLine = sLine.Replace("),(", "");
 
-            }
-            vtkCellArray pCellArray = vtkCellArray.New();
-            pCellArray.InsertNextCell(pvtkPolygon);
-
-            vtkPolyData pPolyData = vtkPolyData.New();
-            pPolyData.SetPoints(pvtkPoints);
-            pPolyData.SetPolys(pCellArray);
-
-            //pvtkAppendPolyData.AddInput(pPolyData);
-            pvtkAppendPolyData.AddInputData(pPolyData);
-          }
-          else if (sLine.StartsWith("LINESTRING Z"))
-          {
-            if (pvtkAppendPolyData == null)
-            {
-              actorType = ActorType.PolyLine;
-              pvtkAppendPolyData = vtkAppendPolyData.New();
-            }
-            sLine = sLine.Replace("LINESTRING Z (", "");
-            sLine = sLine.Replace(")", "");
-
-            pvtkPoints = vtkPoints.New();
-            pvtkPolyLine = vtkPolyLine.New();
-            try
-            {
-              string[] sCoOrdinates = sLine.Split(',');
-              for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
-              {
-                string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
-                if (sOrdinates.Length == 3) // Expect x,y,z
-                {
-                  double x = double.Parse(sOrdinates[0], pEnUs);
-                  double y = double.Parse(sOrdinates[1], pEnUs);
-                  double z = double.Parse(sOrdinates[2], pEnUs);
-                  pvtkPoints.InsertNextPoint(x, y, z);
-                }
-                pvtkPolyLine.GetPointIds().InsertId(iPoint, iPoint);
-              }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            vtkCellArray pCellArray = vtkCellArray.New();
-            pCellArray.InsertNextCell(pvtkPolyLine);
-
-            vtkPolyData pPolyData = vtkPolyData.New();
-
-            pPolyData.SetPoints(pvtkPoints);
-            pPolyData.SetLines(pCellArray);
-
-            //pvtkAppendPolyData.AddInput(pPolyData);
-            pvtkAppendPolyData.AddInputData(pPolyData);
-          }
-          else if (sLine.StartsWith("POINT Z"))
-          {
-            if (pvtkCellArray == null)
-            {
-              actorType = ActorType.Point;
-              pvtkCellArray = vtkCellArray.New();
               pvtkPoints = vtkPoints.New();
+              pvtkPolygon = vtkPolygon.New();
+              try
+              {
+                string[] sCoOrdinates = sLine.Split(',');
+                for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+                {
+                  string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
+                  if (sOrdinates.Length == 3) // Expect x,y,z
+                  {
+                    double x = double.Parse(sOrdinates[0], pEnUs);
+                    double y = double.Parse(sOrdinates[1], pEnUs);
+                    double z = double.Parse(sOrdinates[2], pEnUs);
+                    pvtkPoints.InsertNextPoint(x, y, z);
+
+                    //// Color by RGB per point
+                    //if (z > 2)
+                    //{
+                    //  rgb.InsertNextTuple3(255, 200, 30);
+                    //}
+                    //else
+                    //{
+                    //  rgb.InsertNextTuple3(55, 200, 230);
+                    //}
+                  }
+                  pvtkPolygon.GetPointIds().InsertId(iPoint, iPoint);
+                }
+              }
+              catch (Exception ex)
+              {
+
+              }
+              vtkCellArray pCellArray = vtkCellArray.New();
+              pCellArray.InsertNextCell(pvtkPolygon);
+
+              vtkPolyData pPolyData = vtkPolyData.New();
+              pPolyData.SetPoints(pvtkPoints);
+              pPolyData.SetPolys(pCellArray);
+
+              //// Color by RGB per point
+              //pPolyData.GetPointData().SetScalars(rgb);
+
+              pvtkAppendPolyData.AddInputData(pPolyData);
             }
+            else if (sLine.StartsWith("LINESTRING Z"))
+            {
+              if (pvtkAppendPolyData == null)
+              {
+                actorType = ActorType.PolyLine;
+                pvtkAppendPolyData = vtkAppendPolyData.New();
+              }
+              sLine = sLine.Replace("LINESTRING Z (", "");
+              sLine = sLine.Replace(")", "");
 
-            sLine = sLine.Replace("POINT Z (", "");
-            sLine = sLine.Replace(")", "");
+              pvtkPoints = vtkPoints.New();
+              pvtkPolyLine = vtkPolyLine.New();
+              try
+              {
+                string[] sCoOrdinates = sLine.Split(',');
+                for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+                {
+                  string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
+                  if (sOrdinates.Length == 3) // Expect x,y,z
+                  {
+                    double x = double.Parse(sOrdinates[0], pEnUs);
+                    double y = double.Parse(sOrdinates[1], pEnUs);
+                    double z = double.Parse(sOrdinates[2], pEnUs);
+                    pvtkPoints.InsertNextPoint(x, y, z);
+                  }
+                  pvtkPolyLine.GetPointIds().InsertId(iPoint, iPoint);
+                }
+              }
+              catch (Exception ex)
+              {
 
-            string[] sOrdinates = sLine.Split(' ');
+              }
+              vtkCellArray pCellArray = vtkCellArray.New();
+              pCellArray.InsertNextCell(pvtkPolyLine);
 
-            double x = double.Parse(sOrdinates[0], pEnUs);
-            double y = double.Parse(sOrdinates[1], pEnUs);
-            double z = double.Parse(sOrdinates[2], pEnUs);
-            int iPnt = pvtkPoints.InsertNextPoint(x, y, z);
+              vtkPolyData pPolyData = vtkPolyData.New();
 
-            pvtkIdList = vtkIdList.New();
-            pvtkIdList.InsertNextId(iPnt);
-            pvtkCellArray.InsertNextCell(pvtkIdList);
+              pPolyData.SetPoints(pvtkPoints);
+              pPolyData.SetLines(pCellArray);
+
+              //pvtkAppendPolyData.AddInput(pPolyData);
+              pvtkAppendPolyData.AddInputData(pPolyData);
+            }
+            else if (sLine.StartsWith("POINT Z"))
+            {
+              if (pvtkCellArray == null)
+              {
+                actorType = ActorType.Point;
+                pvtkCellArray = vtkCellArray.New();
+                pvtkPoints = vtkPoints.New();
+
+                //// Color by RGB per point
+                //rgb = vtkUnsignedCharArray.New();
+                //rgb.SetNumberOfComponents(3);
+                //rgb.SetName("Color");
+              }
+
+              sLine = sLine.Replace("POINT Z (", "");
+              sLine = sLine.Replace(")", "");
+
+              string[] sOrdinates = sLine.Split(' ');
+
+              double x = double.Parse(sOrdinates[0], pEnUs);
+              double y = double.Parse(sOrdinates[1], pEnUs);
+              double z = double.Parse(sOrdinates[2], pEnUs);
+              int iPnt = pvtkPoints.InsertNextPoint(x, y, z);
+
+              pvtkIdList = vtkIdList.New();
+              pvtkIdList.InsertNextId(iPnt);
+              pvtkCellArray.InsertNextCell(pvtkIdList);
+
+              //// Color by RGB per point
+              //if (z > 2)
+              //{
+              //  rgb.InsertNextTuple3(255, 200, 30);
+              //}
+              //else
+              //{
+              //  rgb.InsertNextTuple3(55, 200, 230);
+              //}
+
+
+            }
+            iRow++;
+
+            int iPercent = (int)Math.Round((decimal)iRow / ((decimal)p3DDataTable.Rows.Count / (decimal)100), 0);
+            prgMain.Value = iPercent;
+            Application.DoEvents();
           }
-          iRow++;
-        }
 
-        vtkRenderer pvtkRenderer = null;
-        vtkRenderWindow pvtkRenderWindow = null;
+          prgMain.Value = prgMain.Minimum;
+          Application.DoEvents();
 
-        // Create Components of the rendering subsystem
-        pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
-        pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
+          vtkRenderer pvtkRenderer = null;
+          vtkRenderWindow pvtkRenderWindow = null;
 
-        // Create a Mapper
-        vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
-        if (pvtkAppendPolyData != null)
-        {
-          pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
-        }
-        else if (pvtkAppendPolyData == null && pvtkPoints != null)
-        {
-          vtkPolyData pvtkPolyData = vtkPolyData.New();
-          pvtkPolyData.SetPoints(pvtkPoints);
-          pvtkPolyData.SetVerts(pvtkCellArray);
-          //pvtkPolyDataMapper.SetInput(pvtkPolyData);
-          pvtkPolyDataMapper.SetInputData(pvtkPolyData);
-        }
+          // Create Components of the rendering subsystem
+          pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
+          pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
 
-        // Remove current Actor if present
-        if (Actor != null)
-        {
-          try
+          // Create a Mapper
+          vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
+          if (pvtkAppendPolyData != null)
           {
-            vtkPropCollection p = pvtkRenderer.GetViewProps();
-            pvtkRenderer.RemoveViewProp(Actor);
+            pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
           }
-          catch (Exception exRemove) { /* ignore for now */}
+          else if (pvtkAppendPolyData == null && pvtkPoints != null)
+          {
+            vtkPolyData pvtkPolyData = vtkPolyData.New();
+            pvtkPolyData.SetPoints(pvtkPoints);
+            pvtkPolyData.SetVerts(pvtkCellArray);
+            
+            //// Color by RGB per point
+            //pvtkPolyData.GetPointData().SetScalars(rgb);
+
+            pvtkPolyDataMapper.SetInputData(pvtkPolyData);
+          }
+
+          // Remove current Actor if present
+          if (Actor != null)
+          {
+            try
+            {
+              vtkPropCollection p = pvtkRenderer.GetViewProps();
+              pvtkRenderer.RemoveViewProp(Actor);
+            }
+            catch (Exception exRemove) { /* ignore for now */}
+          }
+
+          // Create new Actor
+          Actor = vtkActor.New();
+
+          // Perhaps use volume instead?
+          // http://scipy-cookbook.readthedocs.io/items/vtkVolumeRendering.html
+          //vtkVolume pvtkVolume = new vtkVolume();
+          //pvtkVolume.SetMapper()
+
+          Actor.SetMapper(pvtkPolyDataMapper);
+          Actor.SetVisibility(1);
+
+          // Add Actor to View as a "Prop"
+          pvtkRenderer.AddViewProp(Actor);
+
+          if (pvtkRenderer.VisibleActorCount() == 1)
+          {
+            // Setup Camera etc.
+            pvtkRenderer.ResetCamera();
+            pvtkRenderer.SetAmbient(1, 1, 1);
+            pvtkRenderer.LightFollowCameraOn();
+
+            //renWin.Render();
+            vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+            pvtkCamera.Zoom(1.0D);
+            pvtkRenderer.LightFollowCameraOn();
+            pvtkRenderer.SetLightFollowCamera(1);
+          }
+
+
+          SetActorColor();
+
         }
-
-        // Create new Actor
-        Actor = vtkActor.New();
-
-        // Perhaps use volume instead?
-        // http://scipy-cookbook.readthedocs.io/items/vtkVolumeRendering.html
-        //vtkVolume pvtkVolume = new vtkVolume();
-        //pvtkVolume.SetMapper()
-
-        Actor.SetMapper(pvtkPolyDataMapper);
-        Actor.SetVisibility(1);
-
-        // Add Actor to View as a "Prop"
-        pvtkRenderer.AddViewProp(Actor);
-
-        if (pvtkRenderer.VisibleActorCount() == 1)
-        {
-          // Setup Camera etc.
-          pvtkRenderer.ResetCamera();
-          pvtkRenderer.SetAmbient(1, 1, 1);
-          pvtkRenderer.LightFollowCameraOn();
-
-          //renWin.Render();
-          vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
-          pvtkCamera.Zoom(1.0D);
-          pvtkRenderer.LightFollowCameraOn();
-          pvtkRenderer.SetLightFollowCamera(1);
-        }
-
-
-        SetActorColor();
-
-        
       }
       catch (Exception ex)
       {
         MaterialMessageBox.Show("Er ging iets fout!\n\n" + ex.Message, "SQL fout", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      pDBHelper.Connection.Close();
-      pDBHelper = null;
     }
 
     public void Execute()
@@ -294,10 +382,7 @@ namespace PostGIS3DExplorer
       }
       finally
       {
-        //Application.DoEvents();
       }
-
-
     }
 
     public void btnRemove_Click(object sender, EventArgs e)
@@ -344,6 +429,7 @@ namespace PostGIS3DExplorer
 
         if (actorType == ActorType.Polygon)
         {
+          this.Actor.GetProperty().SetColor(red, green, blue);
           if (rbtnOutline.Checked)
           {
             this.Actor.GetProperty().SetEdgeVisibility(1);
@@ -355,6 +441,7 @@ namespace PostGIS3DExplorer
         }
         else if (actorType == ActorType.PolyLine)
         {
+          this.Actor.GetProperty().SetColor(red, green, blue);
           Actor.GetProperty().SetLineWidth(6);
           Actor.GetProperty().SetRenderLinesAsTubes(true);
         }
@@ -409,6 +496,7 @@ namespace PostGIS3DExplorer
         }
       }
     }
+
   }
 
   public class SQLActorEventArgs : EventArgs

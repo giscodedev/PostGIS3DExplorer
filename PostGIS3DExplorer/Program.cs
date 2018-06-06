@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,6 +16,9 @@ namespace PostGIS3DExplorer
 
     static public MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
     static public Color selectionColor = Color.PaleGoldenrod;
+
+    static public ResourceManager resourceManager; // declare Resource manager to access to specific cultureinfo
+    static public CultureInfo CultureInfo;
 
     /// <summary>
     /// The main entry point for the application.
@@ -38,6 +43,9 @@ namespace PostGIS3DExplorer
 
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
+
+      CultureInfo = CultureInfo.CurrentCulture;
+      resourceManager = new ResourceManager("PostGIS3DExplorer.Resources.Res", typeof(Program).Assembly);
 
       // Configure color schema
       materialSkinManager.ColorScheme = new MaterialSkin.ColorScheme(
