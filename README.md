@@ -12,9 +12,10 @@ Prerequisites:
 To get started quickly, download a [compiled release](../../releases)!
 The interface is Dutch for now, an English version is still a to-do.
 
-![alt text](PostGIS3DExplorer/Screenshots/screenshot1.png "First version")
+![alt text](PostGIS3DExplorer/Screenshots/screenshot002.png "Impression")
 
 Building instructions:
 
 To build this project in Visual Studio 2017+ you need a binary copy of vtk 7, you can find a copy here:
+
 https://github.com/dearman/activizdotnet
