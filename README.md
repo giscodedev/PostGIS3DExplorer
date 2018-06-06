@@ -10,7 +10,7 @@ Prerequisites:
 - .NET Framework 4.6.1
 
 To get started quickly, download a [compiled release](../../releases)!
-The interface is Dutch for now, an English version is still a to-do.
+The interface is available in English and Dutch!
 
 ![alt text](PostGIS3DExplorer/Screenshots/screenshot002.png "Impression")
 
