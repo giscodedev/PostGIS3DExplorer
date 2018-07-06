@@ -138,6 +138,9 @@
       <DependentUpon>SQLEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TreeNodes\SQLTreeNode.cs" />
+    <Content Include="Demodata\rgb_sample.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Screenshots\screenshot002.png" />
     <EmbeddedResource Include="FrmConnection.resx">
       <DependentUpon>FrmConnection.cs</DependentUpon>

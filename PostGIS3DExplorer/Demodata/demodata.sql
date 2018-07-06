@@ -7,6 +7,16 @@ create table public.ahn_sample
 );
 copy ahn_sample from '[demodatapath]/ahn_sample.csv' CSV delimiter ';';
 
+drop table if exists public.rgb_sample;
+create table public.rgb_sample
+(
+  geom geometry(PointZ,28992),
+  r smallint,
+  g smallint,
+  b smallint
+);
+copy rgb_sample from '[demodatapath]/rgb_sample.csv' CSV delimiter ';';
+
 create index ahn_sample_gidx on public.ahn_sample using gist(geom);
 
 drop table if exists public.pand;
@@ -24,3 +34,9 @@ create table public.kabel
 );
 
 insert into public.kabel values (st_GeometryFromText('LINESTRING Z (185764.938985971 594592.399697155 0,185862.536451284 594591.343447531 0)', 28992));
+
+
+
+
+
+

@@ -11,6 +11,7 @@ from &#xD;
   ahn_sample&#xD;
 where &#xD;
   classificatie = 2</SQL>
+          <Size>7</Size>
           <FillColor>Yellow</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -22,8 +23,10 @@ from &#xD;
   ahn_sample&#xD;
 where &#xD;
   classificatie = 2&#xD;
+&#xD;
 </SQL>
-          <FillColor>Olive</FillColor>
+          <Size>6</Size>
+          <FillColor>Aqua</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
@@ -34,6 +37,7 @@ from &#xD;
   ahn_sample&#xD;
 where &#xD;
   classificatie = 6</SQL>
+          <Size>10</Size>
           <FillColor>Fuchsia</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -45,17 +49,19 @@ from &#xD;
   ahn_sample&#xD;
 where &#xD;
   classificatie = 1</SQL>
+          <Size>6</Size>
           <FillColor>Green</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
           <Name>Totaal - Pand contouren</Name>
           <SQL>select &#xD;
-  st_AsText(   ST_Force3D( ST_ExteriorRing(  p.geom  ))   )&#xD;
+  st_AsText(  st_extrude(  ( ST_Force3D( (  p.geom  )) ), 0,0,random() * 10)  )&#xD;
 from &#xD;
-  pand p&#xD;
+  groningen.pand p&#xD;
 &#xD;
-</SQL>
+where p.geom &amp;&amp; st_expand(st_geomfromtext('point(233928.46 582078.83)', 28992), 200, 200, 0)</SQL>
+          <Size>6</Size>
           <FillColor>#8080FF</FillColor>
           <Outline>true</Outline>
         </Query>
@@ -67,6 +73,7 @@ from &#xD;
   pand p&#xD;
 &#xD;
 </SQL>
+          <Size>6</Size>
           <FillColor>#FF0080</FillColor>
           <Outline>true</Outline>
         </Query>
@@ -85,6 +92,7 @@ and&#xD;
   identificatie = '1722100000003767'&#xD;
 and&#xD;
   classificatie = 6</SQL>
+          <Size>6</Size>
           <FillColor>Red</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -103,6 +111,7 @@ and&#xD;
   identificatie = '1722100000003767'&#xD;
 and&#xD;
   classificatie = 6</SQL>
+          <Size>6</Size>
           <FillColor>Yellow</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -139,6 +148,7 @@ from&#xD;
   pand&#xD;
 where &#xD;
   identificatie = '1722100000003767'</SQL>
+          <Size>6</Size>
           <FillColor>Yellow</FillColor>
           <Outline>true</Outline>
         </Query>
@@ -155,6 +165,7 @@ and&#xD;
   identificatie = '1722100000003767'&#xD;
 and&#xD;
   classificatie = 2</SQL>
+          <Size>6</Size>
           <FillColor>#FF8000</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -172,12 +183,14 @@ where &#xD;
 and&#xD;
   classificatie = 2&#xD;
 </SQL>
+          <Size>6</Size>
           <FillColor>#80FF00</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
           <Name>Kabel</Name>
           <SQL>select st_astext(st_translate(geom, 0, 0, 5 )) from kabel</SQL>
+          <Size>6</Size>
           <FillColor>Yellow</FillColor>
           <Outline>true</Outline>
         </Query>
@@ -195,14 +208,26 @@ from &#xD;
   ahn_sample&#xD;
 where &#xD;
   classificatie = 2</SQL>
+          <Size>6</Size>
           <FillColor>Red</FillColor>
+          <Outline>true</Outline>
+        </Query>
+        <Query>
+          <Name>RGB PointCloud</Name>
+          <SQL>select  &#xD;
+  st_AsText(geom),&#xD;
+  r, g, b&#xD;
+from &#xD;
+  public.rgb_sample</SQL>
+          <Size>6</Size>
+          <FillColor>#FF8000</FillColor>
           <Outline>true</Outline>
         </Query>
       </Queries>
       <PostGISConnection>
         <Name>Localhost</Name>
         <Host>localhost</Host>
-        <Database>postgis</Database>
+        <Database>way2go</Database>
         <Port>5432</Port>
         <Schema>wozbag</Schema>
         <User_id>postgres</User_id>

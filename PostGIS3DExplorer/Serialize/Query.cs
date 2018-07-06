@@ -18,6 +18,9 @@ namespace PostGIS3DExplorer.Serialize
     [XmlElement("SQL")]
     public string SQL { get; set; }
 
+    [XmlElement("Size")]
+    public int Grootte { get; set; }
+
     [XmlIgnore]
     public Color Vulkleur { get; set; }
 
@@ -42,6 +45,7 @@ namespace PostGIS3DExplorer.Serialize
       SQL = pQNode.SQLEditorControl.Query;
       Vulkleur = pQNode.SQLEditorControl.FillColor;
       Omlijning = pQNode.SQLEditorControl.Outline;
+      Grootte = pQNode.SQLEditorControl.PointSize;
     }
   }
 }

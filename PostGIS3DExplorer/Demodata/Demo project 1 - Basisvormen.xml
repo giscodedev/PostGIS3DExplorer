@@ -6,22 +6,25 @@
         <Query>
           <Name>Blok</Name>
           <SQL>select st_astext(&#xD;
-  (st_dump((st_extrude( st_expand(st_geomfromtext('point(10 10)', 28992), 5, 5), 0, 0, 10)))).geom&#xD;
+  (st_dump((st_extrude( st_expand(st_geomfromtext('point(10 10)', 28992), 5, 5), 0, 0, 20)))).geom&#xD;
   )</SQL>
-          <FillColor>#80FF80</FillColor>
+          <Size>1</Size>
+          <FillColor>Red</FillColor>
           <Outline>true</Outline>
         </Query>
         <Query>
           <Name>Lijn</Name>
           <SQL>select st_astext(st_geometryfromtext('LINESTRING (10 10 -10, 10 10 20, 15 25 20)'))</SQL>
+          <Size>1</Size>
           <FillColor>Red</FillColor>
           <Outline>false</Outline>
         </Query>
         <Query>
           <Name>Cilinder #1</Name>
           <SQL>select st_astext(&#xD;
-  (st_dump((  st_extrude( st_buffer(st_geomfromtext('point(0 20 0)', 28992), 5, 15), 0, 0, 10)  ))).geom&#xD;
+  (st_dump((  st_extrude( st_buffer(st_geomfromtext('point(-20 20 0)', 28992), 5, 15), 0, 0, 10)  ))).geom&#xD;
   )</SQL>
+          <Size>1</Size>
           <FillColor>Yellow</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -30,6 +33,7 @@
           <SQL>select st_astext(&#xD;
   (st_dump(( st_translate( st_extrude( st_buffer(st_geomfromtext('point(0 0 0)', 28992), 2, 15), 0, 0, 30) , 0,0,-10)  ))).geom&#xD;
   )</SQL>
+          <Size>1</Size>
           <FillColor>Aqua</FillColor>
           <Outline>false</Outline>
         </Query>
@@ -47,14 +51,32 @@
 &#xD;
   ))).geom&#xD;
   )</SQL>
+          <Size>1</Size>
           <FillColor>Lime</FillColor>
           <Outline>false</Outline>
+        </Query>
+        <Query>
+          <Name>Query</Name>
+          <SQL>select &#xD;
+  ST_AsText(&#xD;
+    (&#xD;
+    ST_Dump(&#xD;
+     ST_Extrude(&#xD;
+       ST_Buffer(ST_GeometryFromText('POINT(1 1)', 28992), 5),&#xD;
+      0, 0, 5)&#xD;
+    )&#xD;
+    ).geom&#xD;
+  );&#xD;
+</SQL>
+          <Size>6</Size>
+          <FillColor>#FF8000</FillColor>
+          <Outline>true</Outline>
         </Query>
       </Queries>
       <PostGISConnection>
         <Name>Localhost</Name>
         <Host>localhost</Host>
-        <Database>postgis</Database>
+        <Database>pg3d</Database>
         <Port>5432</Port>
         <Schema>wozbag</Schema>
         <User_id>postgres</User_id>

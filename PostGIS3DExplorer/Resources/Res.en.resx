@@ -169,7 +169,7 @@
     <value>Remove this connection and queries?</value>
   </data>
   <data name="MESSAGE_LOAD_DEMODATA" xml:space="preserve">
-    <value>Do you want to load the demo dataset in the current connection?\n\nTables:\npublic.pand\npublic.ahn_sample\npublic.kabel\n\nWarning: any existing tables will be overwritten!</value>
+    <value>Do you want to load the demo dataset in the current connection?\n\nTables:\npublic.pand\npublic.ahn_sample\npublic.rgb_sample\npublic.kabel\n\nWarning: any existing tables will be overwritten!</value>
   </data>
   <data name="MESSAGE_DEMODATA_ERROR" xml:space="preserve">
     <value>Something went wrong while loading the demodata!</value>
@@ -218,5 +218,8 @@
   </data>
   <data name="CANCEL" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="QUERY_POINTSIZE" xml:space="preserve">
+    <value>Size</value>
   </data>
 </root>

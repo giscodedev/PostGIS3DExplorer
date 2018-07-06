@@ -40,6 +40,7 @@
       this.rbtnFillColor = new System.Windows.Forms.RibbonColorChooser();
       this.rbtnOutline = new System.Windows.Forms.RibbonCheckBox();
       this.ribbonUpDown2 = new System.Windows.Forms.RibbonUpDown();
+      this.rbtnPointSize = new System.Windows.Forms.RibbonUpDown();
       this.panel1 = new System.Windows.Forms.Panel();
       this.prgMain = new MaterialSkin.Controls.MaterialProgressBar();
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
@@ -125,6 +126,7 @@
       this.rbnPanelQuery.Items.Add(this.rbtnFillColor);
       this.rbnPanelQuery.Items.Add(this.rbtnOutline);
       this.rbnPanelQuery.Items.Add(this.ribbonUpDown2);
+      this.rbnPanelQuery.Items.Add(this.rbtnPointSize);
       this.rbnPanelQuery.Text = "Query";
       // 
       // rbtnExecute
@@ -165,6 +167,15 @@
       this.ribbonUpDown2.TextBoxWidth = 50;
       this.ribbonUpDown2.Value = "1";
       this.ribbonUpDown2.Visible = false;
+      // 
+      // rbtnPointSize
+      // 
+      this.rbtnPointSize.Text = "Grootte";
+      this.rbtnPointSize.TextBoxText = "6";
+      this.rbtnPointSize.TextBoxWidth = 50;
+      this.rbtnPointSize.Value = "6";
+      this.rbtnPointSize.UpButtonClicked += new System.Windows.Forms.MouseEventHandler(this.ribbonUpDown1_UpButtonClicked);
+      this.rbtnPointSize.DownButtonClicked += new System.Windows.Forms.MouseEventHandler(this.ribbonUpDown1_DownButtonClicked);
       // 
       // panel1
       // 
@@ -219,5 +230,6 @@
     internal System.Windows.Forms.RibbonPanel rbnPanelQuery;
     private System.Windows.Forms.RibbonUpDown ribbonUpDown2;
     private MaterialSkin.Controls.MaterialProgressBar prgMain;
+    private System.Windows.Forms.RibbonUpDown rbtnPointSize;
   }
 }

@@ -169,7 +169,7 @@
     <value>Deze connectie en onderlinge vragen wissen?</value>
   </data>
   <data name="MESSAGE_LOAD_DEMODATA" xml:space="preserve">
-    <value>Wil je de demo dataset laden in de huidige connectie?\n\nTabellen:\npublic.pand\npublic.ahn_sample\npublic.kabel\n\nLet op: eventuele bestaande tabellen worden overschreven!</value>
+    <value>Wil je de demo dataset laden in de huidige connectie?\n\nTabellen:\npublic.pand\npublic.ahn_sample\npublic.rgb_sample\npublic.kabel\n\nLet op: eventuele bestaande tabellen worden overschreven!</value>
   </data>
   <data name="MESSAGE_DEMODATA_ERROR" xml:space="preserve">
     <value>Er ging iets mis tijdens het laden van de demodata!</value>
@@ -218,5 +218,8 @@
   </data>
   <data name="CANCEL" xml:space="preserve">
     <value>Annuleren</value>
+  </data>
+  <data name="QUERY_POINTSIZE" xml:space="preserve">
+    <value>Grootte</value>
   </data>
 </root>

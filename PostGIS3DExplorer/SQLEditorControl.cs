@@ -73,6 +73,7 @@ namespace PostGIS3DExplorer
       rbtnDelete.Text = Program.resourceManager.GetString("QUERY_REMOVE", pSwitchLanguageEventArgs.CultureInfo);
       rbtnOutline.Text = Program.resourceManager.GetString("QUERY_OUTLINE", pSwitchLanguageEventArgs.CultureInfo);
       rbtnFillColor.Text = Program.resourceManager.GetString("QUERY_FILLCOLOR", pSwitchLanguageEventArgs.CultureInfo);
+      rbtnPointSize.Text = Program.resourceManager.GetString("QUERY_POINTSIZE", pSwitchLanguageEventArgs.CultureInfo);
 
     }
 
@@ -99,6 +100,26 @@ namespace PostGIS3DExplorer
       set { fastColoredTextBox1.Text = value; }
     }
 
+    public int PointSize
+    {
+      get
+      {
+        string sText = rbtnPointSize.TextBoxText;
+        int iValue = 6;
+        if (!Int32.TryParse(sText, out iValue))
+        {
+          iValue = 6;
+        }
+        if (iValue > 15) iValue = 15;
+        if (iValue < 1) iValue = 1;
+        return iValue;
+      }
+      set
+      {
+        rbtnPointSize.TextBoxText = value.ToString();
+      }
+    }
+
     private void SQLExecute(string sSQL)
     {
       vtkAppendPolyData pvtkAppendPolyData = null;
@@ -108,9 +129,10 @@ namespace PostGIS3DExplorer
       vtkCellArray pvtkCellArray = null;
       vtkIdList pvtkIdList = null;
 
-      //// Color by RGB per point (works for meshes and points!)
+      // Color by RGB per point (works for meshes and points!)
       // https://www.vtk.org/Wiki/VTK/Examples/CSharp/Meshes/Color_a_mesh_by_height 
-      //vtkUnsignedCharArray rgb = null;
+      vtkUnsignedCharArray rgb = null;
+      bool bRGB = false;
 
       try
       {
@@ -131,6 +153,11 @@ namespace PostGIS3DExplorer
           Application.DoEvents();
 
           string sLine = "";
+
+          if (p3DDataTable.Columns["r"] != null && p3DDataTable.Columns["g"] != null && p3DDataTable.Columns["b"] != null)
+          {
+            bRGB = true;
+          }
 
           int iRow = 0;
           foreach (DataRow pRow in p3DDataTable.Rows)
@@ -248,10 +275,13 @@ namespace PostGIS3DExplorer
                 pvtkCellArray = vtkCellArray.New();
                 pvtkPoints = vtkPoints.New();
 
-                //// Color by RGB per point
-                //rgb = vtkUnsignedCharArray.New();
-                //rgb.SetNumberOfComponents(3);
-                //rgb.SetName("Color");
+                if (bRGB)
+                {
+                  // Color by RGB per point
+                  rgb = vtkUnsignedCharArray.New();
+                  rgb.SetNumberOfComponents(3);
+                  rgb.SetName("Color");
+                }
               }
 
               sLine = sLine.Replace("POINT Z (", "");
@@ -268,6 +298,20 @@ namespace PostGIS3DExplorer
               pvtkIdList.InsertNextId(iPnt);
               pvtkCellArray.InsertNextCell(pvtkIdList);
 
+              if (bRGB)
+              {
+                if (!pRow.IsNull("r") && !pRow.IsNull("g") && !pRow.IsNull("b"))
+                {
+                  int r = Int32.Parse(pRow["r"].ToString());
+                  int g = Int32.Parse(pRow["g"].ToString());
+                  int b = Int32.Parse(pRow["b"].ToString());
+                  rgb.InsertNextTuple3(r, g, b);
+                }
+                else
+                {
+                  rgb.InsertNextTuple3(0, 0, 0);
+                }
+              }
               //// Color by RGB per point
               //if (z > 2)
               //{
@@ -308,9 +352,12 @@ namespace PostGIS3DExplorer
             vtkPolyData pvtkPolyData = vtkPolyData.New();
             pvtkPolyData.SetPoints(pvtkPoints);
             pvtkPolyData.SetVerts(pvtkCellArray);
-            
-            //// Color by RGB per point
-            //pvtkPolyData.GetPointData().SetScalars(rgb);
+
+            if (bRGB)
+            {
+              // Color by RGB per point
+              pvtkPolyData.GetPointData().SetScalars(rgb);
+            }
 
             pvtkPolyDataMapper.SetInputData(pvtkPolyData);
           }
@@ -442,8 +489,14 @@ namespace PostGIS3DExplorer
         else if (actorType == ActorType.PolyLine)
         {
           this.Actor.GetProperty().SetColor(red, green, blue);
-          Actor.GetProperty().SetLineWidth(6);
+          int iLineWidth = 2;
+          if (this.PointSize > 1)
+          {
+            iLineWidth = this.PointSize;
+          }
+          Actor.GetProperty().SetLineWidth(iLineWidth);
           Actor.GetProperty().SetRenderLinesAsTubes(true);
+          //Actor.GetProperty().set
         }
         else if (actorType == ActorType.Point)
         {
@@ -455,7 +508,7 @@ namespace PostGIS3DExplorer
           {
             this.Actor.GetProperty().SetEdgeVisibility(0);
           }
-          Actor.GetProperty().SetPointSize(12);
+          Actor.GetProperty().SetPointSize(this.PointSize);
           Actor.GetProperty().SetRenderPointsAsSpheres(true);
         }
 
@@ -497,6 +550,23 @@ namespace PostGIS3DExplorer
       }
     }
 
+    private void ribbonUpDown1_UpButtonClicked(object sender, MouseEventArgs e)
+    {
+      int iValue = this.PointSize + 1;
+      rbtnPointSize.TextBoxText = iValue.ToString();
+      SetActorColor();
+    }
+
+    private void ribbonUpDown1_DownButtonClicked(object sender, MouseEventArgs e)
+    {
+      if (this.PointSize == 1)
+      {
+        return;
+      }
+      int iValue = this.PointSize - 1;
+      rbtnPointSize.TextBoxText = iValue.ToString();
+      SetActorColor();
+    }
   }
 
   public class SQLActorEventArgs : EventArgs
