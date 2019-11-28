@@ -90,7 +90,8 @@ namespace PostGIS3DExplorer
 
         string tokenRight = m_sProjectFileName.Substring(i, m_sProjectFileName.Length - i);
         string tokenCenter = @"\...";
-        string tokenLeft = m_sProjectFileName.Substring(0, MAX_WIDTH - (tokenRight.Length + tokenCenter.Length));
+        //string tokenLeft = m_sProjectFileName.Substring(0, MAX_WIDTH - (tokenRight.Length + tokenCenter.Length));
+        string tokenLeft = "";
 
         string shortFileName = tokenLeft + tokenCenter + tokenRight;
 

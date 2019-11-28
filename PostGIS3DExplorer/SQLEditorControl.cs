@@ -74,7 +74,7 @@ namespace PostGIS3DExplorer
       rbtnOutline.Text = Program.resourceManager.GetString("QUERY_OUTLINE", pSwitchLanguageEventArgs.CultureInfo);
       rbtnFillColor.Text = Program.resourceManager.GetString("QUERY_FILLCOLOR", pSwitchLanguageEventArgs.CultureInfo);
       rbtnPointSize.Text = Program.resourceManager.GetString("QUERY_POINTSIZE", pSwitchLanguageEventArgs.CultureInfo);
-
+      rbtnTransparancy.Text = Program.resourceManager.GetString("QUERY_TRANSPARANCY", pSwitchLanguageEventArgs.CultureInfo);
     }
 
     public FrmMain FrmMain
@@ -468,6 +468,9 @@ namespace PostGIS3DExplorer
     {
       if (this.Actor != null)
       {
+        double alpha = (double)this.Opacity / 100;
+        this.Actor.GetProperty().SetOpacity(alpha);
+
         double red = (double)rbtnFillColor.Color.R / 255;
         double green = (double)rbtnFillColor.Color.G / 255;
         double blue = (double)rbtnFillColor.Color.B / 255;
@@ -565,6 +568,44 @@ namespace PostGIS3DExplorer
       }
       int iValue = this.PointSize - 1;
       rbtnPointSize.TextBoxText = iValue.ToString();
+      SetActorColor();
+    }
+
+    public int Opacity
+    {
+      get
+      {
+        int iAlpha = 100;
+        if (!Int32.TryParse(rbtnTransparancy.TextBoxText, out iAlpha))
+        {
+          iAlpha = 100;
+        }
+        return iAlpha;
+      }
+      set
+      {
+        int iAlpha = value;
+        if (iAlpha < 10)
+        {
+          iAlpha = 10;
+        }
+        if (iAlpha > 100)
+        {
+          iAlpha = 100;
+        }
+        rbtnTransparancy.TextBoxText = iAlpha.ToString();
+      }
+    }
+
+    private void rbtnTransparancy_UpButtonClicked(object sender, MouseEventArgs e)
+    {
+      Opacity += 5;
+      SetActorColor();
+    }
+
+    private void rbtnTransparancy_DownButtonClicked(object sender, MouseEventArgs e)
+    {
+      Opacity -= 5;
       SetActorColor();
     }
   }

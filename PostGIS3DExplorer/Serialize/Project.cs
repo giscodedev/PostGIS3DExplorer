@@ -52,6 +52,7 @@ namespace PostGIS3DExplorer.Serialize
           pSQLTreeNode.SQLEditorControl.FillColor = pQuery.Vulkleur;
           pSQLTreeNode.SQLEditorControl.Outline = pQuery.Omlijning;
           pSQLTreeNode.SQLEditorControl.PointSize = pQuery.Grootte;
+          pSQLTreeNode.SQLEditorControl.Opacity = pQuery.Transparantie;
           int i2 = pConnectionTreeNode.Nodes.Add(pSQLTreeNode);
         }
       }

@@ -39,7 +39,7 @@
       this.rbtnDelete = new System.Windows.Forms.RibbonButton();
       this.rbtnFillColor = new System.Windows.Forms.RibbonColorChooser();
       this.rbtnOutline = new System.Windows.Forms.RibbonCheckBox();
-      this.ribbonUpDown2 = new System.Windows.Forms.RibbonUpDown();
+      this.rbtnTransparancy = new System.Windows.Forms.RibbonUpDown();
       this.rbtnPointSize = new System.Windows.Forms.RibbonUpDown();
       this.panel1 = new System.Windows.Forms.Panel();
       this.prgMain = new MaterialSkin.Controls.MaterialProgressBar();
@@ -125,7 +125,7 @@
       this.rbnPanelQuery.Items.Add(this.rbtnDelete);
       this.rbnPanelQuery.Items.Add(this.rbtnFillColor);
       this.rbnPanelQuery.Items.Add(this.rbtnOutline);
-      this.rbnPanelQuery.Items.Add(this.ribbonUpDown2);
+      this.rbnPanelQuery.Items.Add(this.rbtnTransparancy);
       this.rbnPanelQuery.Items.Add(this.rbtnPointSize);
       this.rbnPanelQuery.Text = "Query";
       // 
@@ -160,13 +160,14 @@
       this.rbtnOutline.Text = "Omlijning";
       this.rbtnOutline.CheckBoxCheckChanged += new System.EventHandler(this.rbtnOutline_CheckedChanged);
       // 
-      // ribbonUpDown2
+      // rbtnTransparancy
       // 
-      this.ribbonUpDown2.Text = "Transparantie";
-      this.ribbonUpDown2.TextBoxText = "";
-      this.ribbonUpDown2.TextBoxWidth = 50;
-      this.ribbonUpDown2.Value = "1";
-      this.ribbonUpDown2.Visible = false;
+      this.rbtnTransparancy.Text = "Transparantie %";
+      this.rbtnTransparancy.TextBoxText = "100";
+      this.rbtnTransparancy.TextBoxWidth = 50;
+      this.rbtnTransparancy.Value = "100";
+      this.rbtnTransparancy.UpButtonClicked += new System.Windows.Forms.MouseEventHandler(this.rbtnTransparancy_UpButtonClicked);
+      this.rbtnTransparancy.DownButtonClicked += new System.Windows.Forms.MouseEventHandler(this.rbtnTransparancy_DownButtonClicked);
       // 
       // rbtnPointSize
       // 
@@ -228,7 +229,7 @@
     internal System.Windows.Forms.RibbonTab rbnTabMain;
     private System.Windows.Forms.Panel panel1;
     internal System.Windows.Forms.RibbonPanel rbnPanelQuery;
-    private System.Windows.Forms.RibbonUpDown ribbonUpDown2;
+    private System.Windows.Forms.RibbonUpDown rbtnTransparancy;
     private MaterialSkin.Controls.MaterialProgressBar prgMain;
     private System.Windows.Forms.RibbonUpDown rbtnPointSize;
   }

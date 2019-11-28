@@ -222,4 +222,7 @@
   <data name="QUERY_POINTSIZE" xml:space="preserve">
     <value>Size</value>
   </data>
+  <data name="QUERY_TRANSPARANCY" xml:space="preserve">
+    <value>Opacity %</value>
+  </data>
 </root>

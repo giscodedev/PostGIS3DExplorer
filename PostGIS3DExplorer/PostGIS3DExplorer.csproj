@@ -40,11 +40,11 @@
     </Reference>
     <Reference Include="Kitware.mummy.Runtime, Version=1.0.2.599, Culture=neutral, PublicKeyToken=995c7fb9db2c1b44, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\ActiViz-7.1\Kitware.mummy.Runtime.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\dev\VTK711\Kitware.mummy.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Kitware.VTK, Version=5.8.0.607, Culture=neutral, PublicKeyToken=995c7fb9db2c1b44, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\ActiViz-7.1\Kitware.VTK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\dev\VTK711\Kitware.VTK.dll</HintPath>
     </Reference>
     <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialSkin.Updated.0.2.2\lib\MaterialSkin.dll</HintPath>

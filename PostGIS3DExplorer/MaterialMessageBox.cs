@@ -156,7 +156,8 @@ namespace MaterialSkin.Controls
       // Measure string.
       SizeF stringSize = new SizeF();
       Graphics pGraphics = Graphics.FromHwnd(this.Handle);
-      stringSize = pGraphics.MeasureString(newMessageBox.lblMessage.Text, newMessageBox.lblMessage.Font);
+      //stringSize = pGraphics.MeasureString(newMessageBox.lblMessage.Text, newMessageBox.lblMessage.Font);
+      stringSize = TextRenderer.MeasureText(newMessageBox.lblMessage.Text, newMessageBox.lblMessage.Font);
 
       if ((int)stringSize.Width + 80 > iFormWidth)
       {

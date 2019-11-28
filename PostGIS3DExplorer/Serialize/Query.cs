@@ -21,6 +21,9 @@ namespace PostGIS3DExplorer.Serialize
     [XmlElement("Size")]
     public int Grootte { get; set; }
 
+    [XmlElement("Opacity")]
+    public int Transparantie { get; set; }
+
     [XmlIgnore]
     public Color Vulkleur { get; set; }
 
@@ -46,6 +49,7 @@ namespace PostGIS3DExplorer.Serialize
       Vulkleur = pQNode.SQLEditorControl.FillColor;
       Omlijning = pQNode.SQLEditorControl.Outline;
       Grootte = pQNode.SQLEditorControl.PointSize;
+      Transparantie = pQNode.SQLEditorControl.Opacity;
     }
   }
 }

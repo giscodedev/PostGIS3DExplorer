@@ -222,4 +222,7 @@
   <data name="QUERY_POINTSIZE" xml:space="preserve">
     <value>Grootte</value>
   </data>
+  <data name="QUERY_TRANSPARANCY" xml:space="preserve">
+    <value>Transparantie %</value>
+  </data>
 </root>
