@@ -303,6 +303,7 @@ namespace PostGIS3DExplorer
       pvtkRenderer = this.renderWindowControl1.RenderWindow.GetRenderers().GetFirstRenderer();
       pvtkRenderWindow = this.renderWindowControl1.RenderWindow;
 
+   
       // Setup Camera etc.
       pvtkRenderer.ResetCamera();
       pvtkRenderer.SetAmbient(1, 1, 1);
@@ -310,11 +311,53 @@ namespace PostGIS3DExplorer
 
       //renWin.Render();
       vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+
+
       pvtkCamera.Zoom(1.0D);
+      
+      double[] focalpoint = pvtkCamera.GetFocalPoint();
+      double[] position = pvtkCamera.GetPosition();
+
+      double deltaX = focalpoint[0] - position[0];
+      double deltaY = focalpoint[1] - position[1];
+      double deltaZ = focalpoint[2] - position[2];
+
+      double distance = (double)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+      //focalpoint = (pvtkRenderer.GetActors().GetItemAsObject(0) as vtkOpenGLActor).GetCenter();
+      pvtkCamera.SetPosition(focalpoint[0], focalpoint[1], focalpoint[2] + distance);
+      //pvtkCamera.Azimuth(Math.PI);
+      //pvtkCamera.SetViewUp (0, 0, 1);
+      //pvtkCamera.SetViewAngle(90);
+
+      //pvtkCamera.set
+
+      // http://vtkblog.blogspot.com/2007/04/
+      pvtkCamera.SetRoll(0);
+
       pvtkRenderer.LightFollowCameraOn();
       pvtkRenderer.SetLightFollowCamera(1);
 
-      pvtkRenderWindow.Render();
+      //pvtkCamera.Zoom(1.0D);
+
+      //pvtkCamera.Render(pvtkRenderer);
+
+      pvtkCamera.ComputeViewPlaneNormal();
+
+      if (pvtkRenderer.GetActors().GetNumberOfItems() > 0)
+      {
+        pvtkCamera.UpdateViewport(pvtkRenderer);
+        //this.renderWindowControl1.RenderWindow.Render();
+
+
+        //pvtkRenderWindow.Render();
+        pvtkRenderer.GetRenderWindow().Render();
+
+        //pvtkCamera.UpdateViewport(pvtkRenderer);
+
+        //Application.DoEvents();
+        //this->GetCurrentRenderer()->GetRenderWindow()->Render();
+      }
     }
 
     private void advancedTreeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)

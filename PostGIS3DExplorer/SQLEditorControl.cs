@@ -587,7 +587,7 @@ namespace PostGIS3DExplorer
         int iAlpha = value;
         if (iAlpha < 10)
         {
-          iAlpha = 10;
+          iAlpha = 100;
         }
         if (iAlpha > 100)
         {
