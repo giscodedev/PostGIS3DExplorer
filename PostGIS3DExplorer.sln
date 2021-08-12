@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostGIS3DExplorer", "PostGIS3DExplorer\PostGIS3DExplorer.csproj", "{F4A2617E-AF82-4440-BB3F-BFC9594693A8}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{FE0D2EF1-5B95-4BAC-849A-2C2057CA89D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +21,12 @@ Global
 		{F4A2617E-AF82-4440-BB3F-BFC9594693A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F4A2617E-AF82-4440-BB3F-BFC9594693A8}.Release|x86.ActiveCfg = Release|Any CPU
 		{F4A2617E-AF82-4440-BB3F-BFC9594693A8}.Release|x86.Build.0 = Release|Any CPU
-		{FE0D2EF1-5B95-4BAC-849A-2C2057CA89D9}.Debug|Any CPU.ActiveCfg = Debug
-		{FE0D2EF1-5B95-4BAC-849A-2C2057CA89D9}.Debug|x86.ActiveCfg = Debug
-		{FE0D2EF1-5B95-4BAC-849A-2C2057CA89D9}.Release|Any CPU.ActiveCfg = Release
-		{FE0D2EF1-5B95-4BAC-849A-2C2057CA89D9}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2ED13534-A060-4F34-8A69-4504C2AE352B}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {2ED13534-A060-4F34-8A69-4504C2AE352B}
 	EndGlobalSection
 EndGlobal

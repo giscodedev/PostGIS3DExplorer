@@ -11,7 +11,7 @@ using System.Resources;
 
 namespace PostGIS3DExplorer
 {
-  public partial class FrmMain : MaterialForm
+  public partial class FrmMain : Form
   {
     protected MruStripMenuInline m_pMruMenu;
     private string m_sProjectFileName = "";
@@ -47,16 +47,16 @@ namespace PostGIS3DExplorer
         rbtnSwitchLanguage_Click(rbtnEN, null);
       }
 
-      advancedTreeView1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_11;
+      //advancedTreeView1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_11;
       advancedTreeView1.SelectedFocusColor = Program.selectionColor;
       advancedTreeView1.SelectedLostFocusColor = Color.LightGray;
       advancedTreeView1.Nodes.Clear();
 
-      this.ribbon1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_10;
-      this.ribbon1.RibbonTabFont = Program.materialSkinManager.ROBOTO_MEDIUM_10;
-      Theme.ColorTable.ButtonPressed_2013 = Program.selectionColor;
-      Theme.ColorTable.ButtonSelected_2013 = Program.selectionColor;
-      Theme.ColorTable.TabText_2013 = Program.materialSkinManager.ColorScheme.DarkPrimaryColor;
+      //this.ribbon1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_10;
+      //this.ribbon1.RibbonTabFont = Program.materialSkinManager.ROBOTO_MEDIUM_10;
+      //Theme.ColorTable.ButtonPressed_2013 = Program.selectionColor;
+      //Theme.ColorTable.ButtonSelected_2013 = Program.selectionColor;
+      //Theme.ColorTable.TabText_2013 = Program.materialSkinManager.ColorScheme.DarkPrimaryColor;
 
       string sLastFileName = Properties.Settings.Default.LastProjectFileName;
       if (File.Exists(sLastFileName))
@@ -191,14 +191,14 @@ namespace PostGIS3DExplorer
       // Anti-alias?
       //http://vtk.1045678.n5.nabble.com/Anti-Aliasing-td5597149.html
 
-      //renWin.LineSmoothingOn();
-      //renWin.SetLineSmoothing(1);
+      renWin.LineSmoothingOn();
+      renWin.SetLineSmoothing(1);
 
-      //renWin.PolygonSmoothingOn();
-      //renWin.SetPolygonSmoothing(1);
+      renWin.PolygonSmoothingOn();
+      renWin.SetPolygonSmoothing(1);
 
-      //renWin.PointSmoothingOn();
-      //renWin.SetPointSmoothing(1);
+      renWin.PointSmoothingOn();
+      renWin.SetPointSmoothing(1);
 
       int iOpenGL = renWin.SupportsOpenGL();
 
@@ -212,11 +212,11 @@ namespace PostGIS3DExplorer
       //ren1.UseShadowsOn();
       //ren1.UseDepthPeelingOn();
 
-      //renWin.SetMultiSamples(1);
+      renWin.SetMultiSamples(1);
 
       // Anti-alias (slow but should always work)
       // Too slow without OpenGL...
-      //renWin.SetAAFrames(3);
+      renWin.SetAAFrames(3);
     }
 
     private void Axes()
@@ -427,7 +427,7 @@ namespace PostGIS3DExplorer
 
     private void RemoveAllQueries_Click(object sender, EventArgs e)
     {
-      if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_QUERY_REMOVEALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+      if (MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_QUERY_REMOVEALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
         // Avoid "advancedTreeView1.Nodes.Clear()" for risc of late cleanup of resources
         advancedTreeView1.ClearWithCleanup();
@@ -480,7 +480,7 @@ namespace PostGIS3DExplorer
       }
       if (advancedTreeView1.SelectedNode is ConnectionTreeNode)
       {
-        if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_CONNECTION_REMOVE_ALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+        if (MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_CONNECTION_REMOVE_ALL", Program.CultureInfo), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
         {
           ConnectionTreeNode pConnectionTreeNode = advancedTreeView1.SelectedNode as ConnectionTreeNode;
           for (int iQuery = pConnectionTreeNode.Nodes.Count - 1; iQuery >= 0; iQuery--)
@@ -505,7 +505,7 @@ namespace PostGIS3DExplorer
     /// <param name="e"></param>
     private void rbtnDemoData_Click(object sender, EventArgs e)
     {
-      if (MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_LOAD_DEMODATA", Program.CultureInfo).Replace("\\n", "\n"), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+      if (MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_LOAD_DEMODATA", Program.CultureInfo).Replace("\\n", "\n"), Program.resourceManager.GetString("APP_QUESTION", Program.CultureInfo), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
       {
         ConnectionTreeNode pConnectionTreeNode = this.GetConnectionTreeNode();
 
@@ -524,11 +524,11 @@ namespace PostGIS3DExplorer
             NpgsqlCommand pNpgsqlCommand = new NpgsqlCommand(sSQL, pNpgsqlConnection);
             pNpgsqlCommand.ExecuteScalar();
 
-            MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_SUCCESS", Program.CultureInfo), Program.resourceManager.GetString("MESSAGE_SUCCESS", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_SUCCESS", Program.CultureInfo), Program.resourceManager.GetString("MESSAGE_SUCCESS", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Information);
           }
           catch (Exception ex)
           {
-            MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_ERROR", Program.CultureInfo) + "!\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", Program.resourceManager.GetString("MESSAGE_ERROR", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_DEMODATA_ERROR", Program.CultureInfo) + "!\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", Program.resourceManager.GetString("MESSAGE_ERROR", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Error);
           }
           finally
           {
@@ -580,7 +580,7 @@ namespace PostGIS3DExplorer
 
       LoadProject(sDemoProject);
 
-      MaterialMessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(this, "Demo project is geladen.", "Demo project openen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
     }
 

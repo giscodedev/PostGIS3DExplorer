@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace PostGIS3DExplorer
 {
-  public partial class FrmQuery : MaterialForm
+  public partial class FrmQuery : Form
   {
     public FrmQuery()
     {
@@ -55,7 +55,7 @@ namespace PostGIS3DExplorer
 
         if (sCode != "57014")
         {
-          MaterialMessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_QUERY_ERROR", Program.CultureInfo)  +":\n\n" + ex.Message, Program.resourceManager.GetString("QUERY_ERROR_TITLE", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(this, Program.resourceManager.GetString("MESSAGE_QUERY_ERROR", Program.CultureInfo)  +":\n\n" + ex.Message, Program.resourceManager.GetString("QUERY_ERROR_TITLE", Program.CultureInfo), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
       this.DialogResult = DialogResult.OK;

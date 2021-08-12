@@ -28,7 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.btnCancel = new MaterialSkin.Controls.MaterialRaisedButton();
+      this.btnCancel = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // btnCancel
@@ -36,13 +36,10 @@
       this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
       this.btnCancel.AutoSize = true;
       this.btnCancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.btnCancel.Depth = 0;
-      this.btnCancel.Icon = null;
-      this.btnCancel.Location = new System.Drawing.Point(174, 104);
-      this.btnCancel.MouseState = MaterialSkin.MouseState.HOVER;
+      this.btnCancel.Location = new System.Drawing.Point(169, 77);
+      this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.btnCancel.Name = "btnCancel";
-      this.btnCancel.Primary = true;
-      this.btnCancel.Size = new System.Drawing.Size(100, 36);
+      this.btnCancel.Size = new System.Drawing.Size(113, 35);
       this.btnCancel.TabIndex = 0;
       this.btnCancel.Text = "Annuleren";
       this.btnCancel.UseVisualStyleBackColor = true;
@@ -50,16 +47,17 @@
       // 
       // FrmQuery
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(444, 190);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+      this.ClientSize = new System.Drawing.Size(465, 137);
       this.Controls.Add(this.btnCancel);
+      this.Font = new System.Drawing.Font("Roboto", 10F);
+      this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "FrmQuery";
       this.ShowIcon = false;
       this.ShowInTaskbar = false;
-      this.Sizable = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "Gegevens ophalen...";
       this.Load += new System.EventHandler(this.FrmQuery_Load);
@@ -70,6 +68,6 @@
 
     #endregion
 
-    private MaterialSkin.Controls.MaterialRaisedButton btnCancel;
+    private System.Windows.Forms.Button btnCancel;
   }
 }

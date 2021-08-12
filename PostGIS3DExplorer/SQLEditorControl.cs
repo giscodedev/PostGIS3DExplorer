@@ -48,8 +48,8 @@ namespace PostGIS3DExplorer
       fastColoredTextBox1.Text = "select st_astext(\n  (st_dump((st_extrude( st_expand(st_geomfromtext('point(0 0)', 28992), 5, 5), 0, 0, 10)))).geom\n  )";
       fastColoredTextBox1.Refresh();
 
-      this.ribbon1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_10;
-      this.ribbon1.RibbonTabFont = Program.materialSkinManager.ROBOTO_MEDIUM_10;
+      //this.ribbon1.Font = Program.materialSkinManager.ROBOTO_MEDIUM_10;
+      //this.ribbon1.RibbonTabFont = Program.materialSkinManager.ROBOTO_MEDIUM_10;
     }
 
 
@@ -144,7 +144,7 @@ namespace PostGIS3DExplorer
         {
           p3DDataTable = pFrmQuery.DataTable;
         }
-       
+
         if (p3DDataTable != null)
         {
           prgMain.Minimum = 0;
@@ -158,257 +158,253 @@ namespace PostGIS3DExplorer
           {
             bRGB = true;
           }
-
-          int iRow = 0;
-          foreach (DataRow pRow in p3DDataTable.Rows)
+           
+          string sGeomName = "";
+          foreach (DataColumn col in p3DDataTable.Columns)
           {
-            sLine = pRow[0].ToString();
-            if (sLine.StartsWith("POLYGON Z") || sLine.StartsWith("TRIANGLE Z"))
+            if (col.DataType == typeof(NetTopologySuite.Geometries.Geometry))
             {
-              //// Color by RGB per point
-              //rgb = vtkUnsignedCharArray.New();
-              //rgb.SetNumberOfComponents(3);
-              //rgb.SetName("Color");
+              sGeomName = col.ColumnName;
+              break;
+            }
+          }
 
-              if (pvtkAppendPolyData == null)
-              {
-                actorType = ActorType.Polygon;
-                pvtkAppendPolyData = vtkAppendPolyData.New();
-              }
-              sLine = sLine.Replace("TRIANGLE Z ((", "");
-              sLine = sLine.Replace("POLYGON Z ((", "");
-              sLine = sLine.Replace("))", "");
-              sLine = sLine.Replace("),(", "");
+          if (sGeomName != "")
+          { 
+            int iRow = 0;
+            NetTopologySuite.Geometries.Geometry geom;
 
-              pvtkPoints = vtkPoints.New();
-              pvtkPolygon = vtkPolygon.New();
-              try
+
+            foreach (DataRow pRow in p3DDataTable.Rows)
+            {
+              geom = pRow.Field<NetTopologySuite.Geometries.Geometry>(sGeomName);
+
+
+
+              if (geom is NetTopologySuite.Geometries.MultiPolygon)
               {
-                string[] sCoOrdinates = sLine.Split(',');
-                for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+                if (pvtkAppendPolyData == null)
                 {
-                  string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
-                  if (sOrdinates.Length == 3) // Expect x,y,z
-                  {
-                    double x = double.Parse(sOrdinates[0], pEnUs);
-                    double y = double.Parse(sOrdinates[1], pEnUs);
-                    double z = double.Parse(sOrdinates[2], pEnUs);
-                    pvtkPoints.InsertNextPoint(x, y, z);
+                  actorType = ActorType.Polygon;
+                  pvtkAppendPolyData = vtkAppendPolyData.New();
+                }
 
-                    //// Color by RGB per point
-                    //if (z > 2)
-                    //{
-                    //  rgb.InsertNextTuple3(255, 200, 30);
-                    //}
-                    //else
-                    //{
-                    //  rgb.InsertNextTuple3(55, 200, 230);
-                    //}
+                NetTopologySuite.Geometries.MultiPolygon pMultiPolygon = geom as NetTopologySuite.Geometries.MultiPolygon;
+                foreach (NetTopologySuite.Geometries.Polygon pPolygon in pMultiPolygon.Geometries)
+                {
+                  pvtkPoints = vtkPoints.New();
+                  pvtkPolygon = vtkPolygon.New();
+
+                  for (int iPoint = 0; iPoint < pPolygon.ExteriorRing.NumPoints; iPoint ++)
+                  {
+                    NetTopologySuite.Geometries.Point pPoint = pPolygon.ExteriorRing.GetPointN(iPoint);
+                    pvtkPoints.InsertNextPoint(pPoint.X, pPoint.Y, pPoint.Z);
+                    pvtkPolygon.GetPointIds().InsertId(iPoint, iPoint);
                   }
+
+                  vtkCellArray pCellArray = vtkCellArray.New();
+                  pCellArray.InsertNextCell(pvtkPolygon);
+
+                  vtkPolyData pPolyData = vtkPolyData.New();
+                  pPolyData.SetPoints(pvtkPoints);
+                  pPolyData.SetPolys(pCellArray);
+
+                  //// Color by RGB per point
+                  //pPolyData.GetPointData().SetScalars(rgb);
+
+                  pvtkAppendPolyData.AddInputData(pPolyData);
+                }  
+              }
+              if (geom is NetTopologySuite.Geometries.Polygon)
+              {
+                if (pvtkAppendPolyData == null)
+                {
+                  actorType = ActorType.Polygon;
+                  pvtkAppendPolyData = vtkAppendPolyData.New();
+                }
+
+                NetTopologySuite.Geometries.Polygon pPolygon = geom as NetTopologySuite.Geometries.Polygon;
+                pvtkPoints = vtkPoints.New();
+                pvtkPolygon = vtkPolygon.New();
+
+                for (int iPoint = 0; iPoint < pPolygon.ExteriorRing.NumPoints; iPoint++)
+                {
+                  NetTopologySuite.Geometries.Point pPoint = pPolygon.ExteriorRing.GetPointN(iPoint);
+                  pvtkPoints.InsertNextPoint(pPoint.X, pPoint.Y, pPoint.Z);
                   pvtkPolygon.GetPointIds().InsertId(iPoint, iPoint);
                 }
+
+                vtkCellArray pCellArray = vtkCellArray.New();
+                pCellArray.InsertNextCell(pvtkPolygon);
+
+                vtkPolyData pPolyData = vtkPolyData.New();
+                pPolyData.SetPoints(pvtkPoints);
+                pPolyData.SetPolys(pCellArray);
+
+                //// Color by RGB per point
+                //pPolyData.GetPointData().SetScalars(rgb);
+
+                pvtkAppendPolyData.AddInputData(pPolyData);
               }
-              catch (Exception ex)
+              else if (geom is NetTopologySuite.Geometries.LineString)
               {
-
-              }
-              vtkCellArray pCellArray = vtkCellArray.New();
-              pCellArray.InsertNextCell(pvtkPolygon);
-
-              vtkPolyData pPolyData = vtkPolyData.New();
-              pPolyData.SetPoints(pvtkPoints);
-              pPolyData.SetPolys(pCellArray);
-
-              //// Color by RGB per point
-              //pPolyData.GetPointData().SetScalars(rgb);
-
-              pvtkAppendPolyData.AddInputData(pPolyData);
-            }
-            else if (sLine.StartsWith("LINESTRING Z"))
-            {
-              if (pvtkAppendPolyData == null)
-              {
-                actorType = ActorType.PolyLine;
-                pvtkAppendPolyData = vtkAppendPolyData.New();
-              }
-              sLine = sLine.Replace("LINESTRING Z (", "");
-              sLine = sLine.Replace(")", "");
-
-              pvtkPoints = vtkPoints.New();
-              pvtkPolyLine = vtkPolyLine.New();
-              try
-              {
-                string[] sCoOrdinates = sLine.Split(',');
-                for (int iPoint = 0; iPoint < sCoOrdinates.Length; iPoint++)
+                if (pvtkAppendPolyData == null)
                 {
-                  string[] sOrdinates = sCoOrdinates[iPoint].Trim().Split(' ');
-                  if (sOrdinates.Length == 3) // Expect x,y,z
-                  {
-                    double x = double.Parse(sOrdinates[0], pEnUs);
-                    double y = double.Parse(sOrdinates[1], pEnUs);
-                    double z = double.Parse(sOrdinates[2], pEnUs);
-                    pvtkPoints.InsertNextPoint(x, y, z);
-                  }
-                  pvtkPolyLine.GetPointIds().InsertId(iPoint, iPoint);
+                  actorType = ActorType.PolyLine;
+                  pvtkAppendPolyData = vtkAppendPolyData.New();
                 }
-              }
-              catch (Exception ex)
-              {
 
-              }
-              vtkCellArray pCellArray = vtkCellArray.New();
-              pCellArray.InsertNextCell(pvtkPolyLine);
-
-              vtkPolyData pPolyData = vtkPolyData.New();
-
-              pPolyData.SetPoints(pvtkPoints);
-              pPolyData.SetLines(pCellArray);
-
-              //pvtkAppendPolyData.AddInput(pPolyData);
-              pvtkAppendPolyData.AddInputData(pPolyData);
-            }
-            else if (sLine.StartsWith("POINT Z"))
-            {
-              if (pvtkCellArray == null)
-              {
-                actorType = ActorType.Point;
-                pvtkCellArray = vtkCellArray.New();
                 pvtkPoints = vtkPoints.New();
+                pvtkPolyLine = vtkPolyLine.New();
+                try
+                {
+                  NetTopologySuite.Geometries.LineString pLineString = geom as NetTopologySuite.Geometries.LineString;
+                  for (int iPoint = 0; iPoint < pLineString.NumPoints; iPoint++)
+                  {
+                    NetTopologySuite.Geometries.Point pPoint = pLineString.GetPointN(iPoint);
+                    pvtkPoints.InsertNextPoint(pPoint.X, pPoint.Y, pPoint.Z);
+                    pvtkPolyLine.GetPointIds().InsertId(iPoint, iPoint);
+                  }
+                }
+                catch (Exception ex)
+                {
 
+                }
+                vtkCellArray pCellArray = vtkCellArray.New();
+                pCellArray.InsertNextCell(pvtkPolyLine);
+
+                vtkPolyData pPolyData = vtkPolyData.New();
+
+                pPolyData.SetPoints(pvtkPoints);
+                pPolyData.SetLines(pCellArray);
+
+                //pvtkAppendPolyData.AddInput(pPolyData);
+                pvtkAppendPolyData.AddInputData(pPolyData);
+              }
+              else if (geom is NetTopologySuite.Geometries.Point)
+              {
+                if (pvtkCellArray == null)
+                {
+                  actorType = ActorType.Point;
+                  pvtkCellArray = vtkCellArray.New();
+                  pvtkPoints = vtkPoints.New();
+
+                  if (bRGB)
+                  {
+                    // Color by RGB per point
+                    rgb = vtkUnsignedCharArray.New();
+                    rgb.SetNumberOfComponents(3);
+                    rgb.SetName("Color");
+                  }
+                }
+
+                NetTopologySuite.Geometries.Point pPoint = geom as NetTopologySuite.Geometries.Point;
+                int iPnt = pvtkPoints.InsertNextPoint(pPoint.X, pPoint.Y, pPoint.Z);
+
+                pvtkIdList = vtkIdList.New();
+                pvtkIdList.InsertNextId(iPnt);
+                pvtkCellArray.InsertNextCell(pvtkIdList);
                 if (bRGB)
                 {
-                  // Color by RGB per point
-                  rgb = vtkUnsignedCharArray.New();
-                  rgb.SetNumberOfComponents(3);
-                  rgb.SetName("Color");
+                  if (!pRow.IsNull("r") && !pRow.IsNull("g") && !pRow.IsNull("b"))
+                  {
+                    int r = Int32.Parse(pRow["r"].ToString());
+                    int g = Int32.Parse(pRow["g"].ToString());
+                    int b = Int32.Parse(pRow["b"].ToString());
+                    rgb.InsertNextTuple3(r, g, b);
+                  }
+                  else
+                  {
+                    rgb.InsertNextTuple3(0, 0, 0);
+                  }
                 }
+
+
               }
+              int iPercent = (int)Math.Round((decimal)iRow / ((decimal)p3DDataTable.Rows.Count / (decimal)100), 0);
+              
+              prgMain.Value = iPercent;
+              Application.DoEvents();
+            }
 
-              sLine = sLine.Replace("POINT Z (", "");
-              sLine = sLine.Replace(")", "");
+            prgMain.Value = prgMain.Minimum;
+            Application.DoEvents();
 
-              string[] sOrdinates = sLine.Split(' ');
+            vtkRenderer pvtkRenderer = null;
+            vtkRenderWindow pvtkRenderWindow = null;
 
-              double x = double.Parse(sOrdinates[0], pEnUs);
-              double y = double.Parse(sOrdinates[1], pEnUs);
-              double z = double.Parse(sOrdinates[2], pEnUs);
-              int iPnt = pvtkPoints.InsertNextPoint(x, y, z);
+            // Create Components of the rendering subsystem
+            pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
+            pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
 
-              pvtkIdList = vtkIdList.New();
-              pvtkIdList.InsertNextId(iPnt);
-              pvtkCellArray.InsertNextCell(pvtkIdList);
+            // Create a Mapper
+            vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
+            if (pvtkAppendPolyData != null)
+            {
+              pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
+            }
+            else if (pvtkAppendPolyData == null && pvtkPoints != null)
+            {
+              vtkPolyData pvtkPolyData = vtkPolyData.New();
+              pvtkPolyData.SetPoints(pvtkPoints);
+              pvtkPolyData.SetVerts(pvtkCellArray);
 
               if (bRGB)
               {
-                if (!pRow.IsNull("r") && !pRow.IsNull("g") && !pRow.IsNull("b"))
-                {
-                  int r = Int32.Parse(pRow["r"].ToString());
-                  int g = Int32.Parse(pRow["g"].ToString());
-                  int b = Int32.Parse(pRow["b"].ToString());
-                  rgb.InsertNextTuple3(r, g, b);
-                }
-                else
-                {
-                  rgb.InsertNextTuple3(0, 0, 0);
-                }
+                // Color by RGB per point
+                pvtkPolyData.GetPointData().SetScalars(rgb);
               }
-              //// Color by RGB per point
-              //if (z > 2)
-              //{
-              //  rgb.InsertNextTuple3(255, 200, 30);
-              //}
-              //else
-              //{
-              //  rgb.InsertNextTuple3(55, 200, 230);
-              //}
 
-
+              pvtkPolyDataMapper.SetInputData(pvtkPolyData);
             }
-            iRow++;
 
-            int iPercent = (int)Math.Round((decimal)iRow / ((decimal)p3DDataTable.Rows.Count / (decimal)100), 0);
-            prgMain.Value = iPercent;
-            Application.DoEvents();
-          }
-
-          prgMain.Value = prgMain.Minimum;
-          Application.DoEvents();
-
-          vtkRenderer pvtkRenderer = null;
-          vtkRenderWindow pvtkRenderWindow = null;
-
-          // Create Components of the rendering subsystem
-          pvtkRenderer = this.RenderWindowControl.RenderWindow.GetRenderers().GetFirstRenderer();
-          pvtkRenderWindow = this.RenderWindowControl.RenderWindow;
-
-          // Create a Mapper
-          vtkPolyDataMapper pvtkPolyDataMapper = vtkPolyDataMapper.New();
-          if (pvtkAppendPolyData != null)
-          {
-            pvtkPolyDataMapper.SetInputConnection(pvtkAppendPolyData.GetOutputPort());
-          }
-          else if (pvtkAppendPolyData == null && pvtkPoints != null)
-          {
-            vtkPolyData pvtkPolyData = vtkPolyData.New();
-            pvtkPolyData.SetPoints(pvtkPoints);
-            pvtkPolyData.SetVerts(pvtkCellArray);
-
-            if (bRGB)
+            // Remove current Actor if present
+            if (Actor != null)
             {
-              // Color by RGB per point
-              pvtkPolyData.GetPointData().SetScalars(rgb);
+              try
+              {
+                vtkPropCollection p = pvtkRenderer.GetViewProps();
+                pvtkRenderer.RemoveViewProp(Actor);
+              }
+              catch (Exception exRemove) { /* ignore for now */}
             }
 
-            pvtkPolyDataMapper.SetInputData(pvtkPolyData);
-          }
+            // Create new Actor
+            Actor = vtkActor.New();
 
-          // Remove current Actor if present
-          if (Actor != null)
-          {
-            try
+            // Perhaps use volume instead?
+            // http://scipy-cookbook.readthedocs.io/items/vtkVolumeRendering.html
+            //vtkVolume pvtkVolume = new vtkVolume();
+            //pvtkVolume.SetMapper()
+
+            Actor.SetMapper(pvtkPolyDataMapper);
+            Actor.SetVisibility(1);
+
+            // Add Actor to View as a "Prop"
+            pvtkRenderer.AddViewProp(Actor);
+
+            if (pvtkRenderer.VisibleActorCount() == 1)
             {
-              vtkPropCollection p = pvtkRenderer.GetViewProps();
-              pvtkRenderer.RemoveViewProp(Actor);
+              // Setup Camera etc.
+              pvtkRenderer.ResetCamera();
+              pvtkRenderer.SetAmbient(1, 1, 1);
+              pvtkRenderer.LightFollowCameraOn();
+
+              //renWin.Render();
+              vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
+              pvtkCamera.Zoom(1.0D);
+              pvtkRenderer.LightFollowCameraOn();
+              pvtkRenderer.SetLightFollowCamera(1);
             }
-            catch (Exception exRemove) { /* ignore for now */}
+
+
+            SetActorColor();
           }
-
-          // Create new Actor
-          Actor = vtkActor.New();
-
-          // Perhaps use volume instead?
-          // http://scipy-cookbook.readthedocs.io/items/vtkVolumeRendering.html
-          //vtkVolume pvtkVolume = new vtkVolume();
-          //pvtkVolume.SetMapper()
-
-          Actor.SetMapper(pvtkPolyDataMapper);
-          Actor.SetVisibility(1);
-
-          // Add Actor to View as a "Prop"
-          pvtkRenderer.AddViewProp(Actor);
-
-          if (pvtkRenderer.VisibleActorCount() == 1)
-          {
-            // Setup Camera etc.
-            pvtkRenderer.ResetCamera();
-            pvtkRenderer.SetAmbient(1, 1, 1);
-            pvtkRenderer.LightFollowCameraOn();
-
-            //renWin.Render();
-            vtkCamera pvtkCamera = pvtkRenderer.GetActiveCamera();
-            pvtkCamera.Zoom(1.0D);
-            pvtkRenderer.LightFollowCameraOn();
-            pvtkRenderer.SetLightFollowCamera(1);
-          }
-
-
-          SetActorColor();
-
         }
       }
       catch (Exception ex)
       {
-        MaterialMessageBox.Show("Er ging iets fout!\n\n" + ex.Message, "SQL fout", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show("Er ging iets fout!\n\n" + ex.Message, "SQL fout", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 

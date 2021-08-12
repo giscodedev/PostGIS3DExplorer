@@ -41,17 +41,15 @@
       this.rbtnOutline = new System.Windows.Forms.RibbonCheckBox();
       this.rbtnTransparancy = new System.Windows.Forms.RibbonUpDown();
       this.rbtnPointSize = new System.Windows.Forms.RibbonUpDown();
-      this.panel1 = new System.Windows.Forms.Panel();
       this.prgMain = new MaterialSkin.Controls.MaterialProgressBar();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.ribbonPanel1 = new System.Windows.Forms.RibbonPanel();
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
-      this.panel1.SuspendLayout();
+      this.tableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
       // 
       // fastColoredTextBox1
       // 
-      this.fastColoredTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
@@ -64,21 +62,23 @@
         '\'',
         '\''};
       this.fastColoredTextBox1.AutoIndent = false;
-      this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(893, 45);
+      this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(1187, 60);
       this.fastColoredTextBox1.BackBrush = null;
-      this.fastColoredTextBox1.CharHeight = 15;
-      this.fastColoredTextBox1.CharWidth = 9;
+      this.fastColoredTextBox1.CharHeight = 20;
+      this.fastColoredTextBox1.CharWidth = 12;
       this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
       this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-      this.fastColoredTextBox1.Font = new System.Drawing.Font("Lucida Console", 11.25F);
+      this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.fastColoredTextBox1.Font = new System.Drawing.Font("Lucida Console", 10F);
       this.fastColoredTextBox1.IsReplaceMode = false;
       this.fastColoredTextBox1.LineInterval = 1;
-      this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 113);
+      this.fastColoredTextBox1.Location = new System.Drawing.Point(4, 139);
+      this.fastColoredTextBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.fastColoredTextBox1.Name = "fastColoredTextBox1";
       this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
       this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
       this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-      this.fastColoredTextBox1.Size = new System.Drawing.Size(660, 171);
+      this.fastColoredTextBox1.Size = new System.Drawing.Size(1377, 446);
       this.fastColoredTextBox1.TabIndex = 81;
       this.fastColoredTextBox1.TabLength = 2;
       this.fastColoredTextBox1.Text = "select st_astext( \r\n  (st_dump((st_extrude( st_expand(st_geomfromtext(\'point(0 0)" +
@@ -105,7 +105,7 @@
       this.ribbon1.OrbStyle = System.Windows.Forms.RibbonOrbStyle.Office_2013;
       this.ribbon1.OrbVisible = false;
       this.ribbon1.RibbonTabFont = new System.Drawing.Font("Trebuchet MS", 9F);
-      this.ribbon1.Size = new System.Drawing.Size(660, 110);
+      this.ribbon1.Size = new System.Drawing.Size(1385, 134);
       this.ribbon1.TabIndex = 85;
       this.ribbon1.Tabs.Add(this.rbnTabMain);
       this.ribbon1.TabsMargin = new System.Windows.Forms.Padding(12, 2, 20, 0);
@@ -115,6 +115,7 @@
       // rbnTabMain
       // 
       this.rbnTabMain.Panels.Add(this.rbnPanelQuery);
+      this.rbnTabMain.Panels.Add(this.ribbonPanel1);
       this.rbnTabMain.Text = "Query 1";
       // 
       // rbnPanelQuery
@@ -178,41 +179,51 @@
       this.rbtnPointSize.UpButtonClicked += new System.Windows.Forms.MouseEventHandler(this.ribbonUpDown1_UpButtonClicked);
       this.rbtnPointSize.DownButtonClicked += new System.Windows.Forms.MouseEventHandler(this.ribbonUpDown1_DownButtonClicked);
       // 
-      // panel1
-      // 
-      this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.panel1.Controls.Add(this.prgMain);
-      this.panel1.Controls.Add(this.ribbon1);
-      this.panel1.Controls.Add(this.fastColoredTextBox1);
-      this.panel1.Location = new System.Drawing.Point(2, -27);
-      this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(660, 299);
-      this.panel1.TabIndex = 86;
-      // 
       // prgMain
       // 
       this.prgMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.prgMain.Depth = 0;
-      this.prgMain.Location = new System.Drawing.Point(3, 292);
+      this.prgMain.Location = new System.Drawing.Point(4, 600);
+      this.prgMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.prgMain.MouseState = MaterialSkin.MouseState.HOVER;
       this.prgMain.Name = "prgMain";
-      this.prgMain.Size = new System.Drawing.Size(650, 5);
+      this.prgMain.Size = new System.Drawing.Size(1377, 5);
       this.prgMain.TabIndex = 86;
+      // 
+      // tableLayoutPanel1
+      // 
+      this.tableLayoutPanel1.ColumnCount = 1;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.Controls.Add(this.prgMain, 0, 2);
+      this.tableLayoutPanel1.Controls.Add(this.ribbon1);
+      this.tableLayoutPanel1.Controls.Add(this.fastColoredTextBox1, 0, 1);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 3;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 134F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(1385, 610);
+      this.tableLayoutPanel1.TabIndex = 87;
+      // 
+      // ribbonPanel1
+      // 
+      this.ribbonPanel1.Text = "ribbonPanel1";
       // 
       // SQLEditorControl
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.White;
-      this.Controls.Add(this.panel1);
+      this.Controls.Add(this.tableLayoutPanel1);
+      this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.Name = "SQLEditorControl";
-      this.Size = new System.Drawing.Size(665, 275);
+      this.Size = new System.Drawing.Size(1385, 610);
       this.Load += new System.EventHandler(this.SQLEditorControl_Load);
       ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
-      this.panel1.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -227,10 +238,11 @@
     private System.Windows.Forms.RibbonCheckBox rbtnOutline;
     private System.Windows.Forms.Ribbon ribbon1;
     internal System.Windows.Forms.RibbonTab rbnTabMain;
-    private System.Windows.Forms.Panel panel1;
     internal System.Windows.Forms.RibbonPanel rbnPanelQuery;
     private System.Windows.Forms.RibbonUpDown rbtnTransparancy;
     private MaterialSkin.Controls.MaterialProgressBar prgMain;
     private System.Windows.Forms.RibbonUpDown rbtnPointSize;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+    private System.Windows.Forms.RibbonPanel ribbonPanel1;
   }
 }

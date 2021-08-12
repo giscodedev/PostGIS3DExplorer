@@ -1,4 +1,5 @@
 ﻿using MaterialSkin;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,8 +15,8 @@ namespace PostGIS3DExplorer
   {
     public static DBHelper DBHelper = null;
 
-    static public MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
-    static public Color selectionColor = Color.PaleGoldenrod;
+    //static public MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
+    static public Color selectionColor = Color.Red;
 
     static public ResourceManager resourceManager; // declare Resource manager to access to specific cultureinfo
     static public CultureInfo CultureInfo;
@@ -44,16 +45,18 @@ namespace PostGIS3DExplorer
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
+      NpgsqlConnection.GlobalTypeMapper.UseNetTopologySuite();
+
       CultureInfo = CultureInfo.CurrentCulture;
       resourceManager = new ResourceManager("PostGIS3DExplorer.Resources.Res", typeof(Program).Assembly);
 
-      // Configure color schema
-      materialSkinManager.ColorScheme = new MaterialSkin.ColorScheme(
-          Primary.Red400, Primary.Red600,
-          Primary.Red700, Accent.Red200,
-          TextShade.WHITE);
-      selectionColor = ((int)Primary.Red200).ToColor();
-      materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+      //// Configure color schema
+      //materialSkinManager.ColorScheme = new MaterialSkin.ColorScheme(
+      //    Primary.Red400, Primary.Red600,
+      //    Primary.Red700, Accent.Red200,
+      //    TextShade.WHITE);
+      //selectionColor = ((int)Primary.Red200).ToColor();
+      //materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
 
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);

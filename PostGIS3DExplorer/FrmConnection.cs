@@ -13,7 +13,7 @@ using MaterialSkin.Controls;
 
 namespace PostGIS3DExplorer
 {
-  public partial class FrmConnection : MaterialForm
+  public partial class FrmConnection : Form
   {
     private PostGISConnectionParams m_pPostGISConnectionParams = new PostGISConnectionParams();
     private Bitmap m_pImgCheck = null;
@@ -108,7 +108,7 @@ namespace PostGIS3DExplorer
       }
       catch (Exception ex)
       {
-        MaterialMessageBox.Show(this, "Fout tijdens de inlog:\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(this, "Fout tijdens de inlog:\n\n" + ex.Message + "\n\n(" + ex.StackTrace + ")", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
       this.Cursor = Cursors.Default;

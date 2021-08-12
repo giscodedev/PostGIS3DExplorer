@@ -30,10 +30,8 @@
     {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
-      this.split3D_sql = new System.Windows.Forms.SplitContainer();
       this.advancedTreeView1 = new MaterialSkin.Controls.AdvancedTreeView();
       this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-      this.splitContainer1 = new System.Windows.Forms.SplitContainer();
       this.renderWindowControl1 = new Kitware.VTK.RenderWindowControl();
       this.SqlContainerPanel = new System.Windows.Forms.Panel();
       this.ribbon1 = new System.Windows.Forms.Ribbon();
@@ -60,38 +58,9 @@
       this.rbtnEN = new System.Windows.Forms.RibbonButton();
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-      this.mainControlsPanel = new System.Windows.Forms.Panel();
-      ((System.ComponentModel.ISupportInitialize)(this.split3D_sql)).BeginInit();
-      this.split3D_sql.Panel1.SuspendLayout();
-      this.split3D_sql.Panel2.SuspendLayout();
-      this.split3D_sql.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-      this.splitContainer1.Panel1.SuspendLayout();
-      this.splitContainer1.Panel2.SuspendLayout();
-      this.splitContainer1.SuspendLayout();
-      this.mainControlsPanel.SuspendLayout();
+      this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+      this.tableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
-      // 
-      // split3D_sql
-      // 
-      this.split3D_sql.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.split3D_sql.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-      this.split3D_sql.Location = new System.Drawing.Point(3, 110);
-      this.split3D_sql.Margin = new System.Windows.Forms.Padding(0);
-      this.split3D_sql.Name = "split3D_sql";
-      // 
-      // split3D_sql.Panel1
-      // 
-      this.split3D_sql.Panel1.Controls.Add(this.advancedTreeView1);
-      // 
-      // split3D_sql.Panel2
-      // 
-      this.split3D_sql.Panel2.Controls.Add(this.splitContainer1);
-      this.split3D_sql.Size = new System.Drawing.Size(1423, 843);
-      this.split3D_sql.SplitterDistance = 340;
-      this.split3D_sql.TabIndex = 84;
       // 
       // advancedTreeView1
       // 
@@ -102,12 +71,13 @@
       this.advancedTreeView1.ImageIndex = 0;
       this.advancedTreeView1.ImageList = this.imageList1;
       this.advancedTreeView1.LabelEdit = true;
-      this.advancedTreeView1.Location = new System.Drawing.Point(0, 0);
+      this.advancedTreeView1.Location = new System.Drawing.Point(3, 138);
       this.advancedTreeView1.Name = "advancedTreeView1";
+      this.tableLayoutPanel1.SetRowSpan(this.advancedTreeView1, 2);
       this.advancedTreeView1.SelectedFocusColor = System.Drawing.Color.Empty;
       this.advancedTreeView1.SelectedImageIndex = 0;
       this.advancedTreeView1.SelectedLostFocusColor = System.Drawing.Color.Empty;
-      this.advancedTreeView1.Size = new System.Drawing.Size(340, 843);
+      this.advancedTreeView1.Size = new System.Drawing.Size(594, 1205);
       this.advancedTreeView1.TabIndex = 0;
       this.advancedTreeView1.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.advancedTreeView1_AfterLabelEdit);
       this.advancedTreeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.advancedTreeView1_NodeMouseClick);
@@ -119,34 +89,14 @@
       this.imageList1.Images.SetKeyName(0, "sql");
       this.imageList1.Images.SetKeyName(1, "connection");
       // 
-      // splitContainer1
-      // 
-      this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-      this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-      this.splitContainer1.Name = "splitContainer1";
-      this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-      // 
-      // splitContainer1.Panel1
-      // 
-      this.splitContainer1.Panel1.Controls.Add(this.renderWindowControl1);
-      this.splitContainer1.Panel1.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-      // 
-      // splitContainer1.Panel2
-      // 
-      this.splitContainer1.Panel2.Controls.Add(this.SqlContainerPanel);
-      this.splitContainer1.Size = new System.Drawing.Size(1079, 843);
-      this.splitContainer1.SplitterDistance = 510;
-      this.splitContainer1.TabIndex = 82;
-      // 
       // renderWindowControl1
       // 
       this.renderWindowControl1.AddTestActors = false;
       this.renderWindowControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.renderWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.renderWindowControl1.Location = new System.Drawing.Point(0, 0);
+      this.renderWindowControl1.Location = new System.Drawing.Point(603, 138);
       this.renderWindowControl1.Name = "renderWindowControl1";
-      this.renderWindowControl1.Size = new System.Drawing.Size(1079, 510);
+      this.renderWindowControl1.Size = new System.Drawing.Size(1372, 755);
       this.renderWindowControl1.TabIndex = 82;
       this.renderWindowControl1.TestText = null;
       this.renderWindowControl1.Load += new System.EventHandler(this.renderWindowControl1_Load);
@@ -155,14 +105,15 @@
       // 
       this.SqlContainerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.SqlContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.SqlContainerPanel.Location = new System.Drawing.Point(0, 0);
+      this.SqlContainerPanel.Location = new System.Drawing.Point(603, 899);
       this.SqlContainerPanel.Name = "SqlContainerPanel";
-      this.SqlContainerPanel.Size = new System.Drawing.Size(1079, 329);
+      this.SqlContainerPanel.Size = new System.Drawing.Size(1372, 444);
       this.SqlContainerPanel.TabIndex = 83;
       // 
       // ribbon1
       // 
       this.ribbon1.CaptionBarVisible = false;
+      this.tableLayoutPanel1.SetColumnSpan(this.ribbon1, 2);
       this.ribbon1.Font = new System.Drawing.Font("Roboto", 9F);
       this.ribbon1.Location = new System.Drawing.Point(0, 0);
       this.ribbon1.Margin = new System.Windows.Forms.Padding(0);
@@ -184,7 +135,7 @@
       // 
       this.ribbon1.QuickAcessToolbar.Visible = false;
       this.ribbon1.RibbonTabFont = new System.Drawing.Font("Roboto", 10F);
-      this.ribbon1.Size = new System.Drawing.Size(1426, 110);
+      this.ribbon1.Size = new System.Drawing.Size(1978, 135);
       this.ribbon1.TabIndex = 83;
       this.ribbon1.Tabs.Add(this.ribbonTab1);
       this.ribbon1.TabsMargin = new System.Windows.Forms.Padding(12, 2, 20, 0);
@@ -362,54 +313,51 @@
       // 
       this.openFileDialog1.FileName = "openFileDialog1";
       // 
-      // mainControlsPanel
+      // tableLayoutPanel1
       // 
-      this.mainControlsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.mainControlsPanel.Controls.Add(this.ribbon1);
-      this.mainControlsPanel.Controls.Add(this.split3D_sql);
-      this.mainControlsPanel.Location = new System.Drawing.Point(6, 65);
-      this.mainControlsPanel.Name = "mainControlsPanel";
-      this.mainControlsPanel.Size = new System.Drawing.Size(1426, 953);
-      this.mainControlsPanel.TabIndex = 85;
+      this.tableLayoutPanel1.ColumnCount = 2;
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 600F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.Controls.Add(this.SqlContainerPanel, 1, 2);
+      this.tableLayoutPanel1.Controls.Add(this.renderWindowControl1, 1, 1);
+      this.tableLayoutPanel1.Controls.Add(this.advancedTreeView1, 0, 1);
+      this.tableLayoutPanel1.Controls.Add(this.ribbon1);
+      this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+      this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+      this.tableLayoutPanel1.RowCount = 3;
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 135F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+      this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 450F));
+      this.tableLayoutPanel1.Size = new System.Drawing.Size(1978, 1346);
+      this.tableLayoutPanel1.TabIndex = 86;
       // 
       // FrmMain
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1440, 1024);
-      this.Controls.Add(this.mainControlsPanel);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+      this.ClientSize = new System.Drawing.Size(1978, 1346);
+      this.Controls.Add(this.tableLayoutPanel1);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
       this.Name = "FrmMain";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "PostGIS 3D Verkenner";
       this.Load += new System.EventHandler(this.FrmMain_Load);
-      this.split3D_sql.Panel1.ResumeLayout(false);
-      this.split3D_sql.Panel2.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.split3D_sql)).EndInit();
-      this.split3D_sql.ResumeLayout(false);
-      this.splitContainer1.Panel1.ResumeLayout(false);
-      this.splitContainer1.Panel2.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-      this.splitContainer1.ResumeLayout(false);
-      this.mainControlsPanel.ResumeLayout(false);
+      this.tableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
 
     #endregion
-    private System.Windows.Forms.SplitContainer splitContainer1;
     private System.Windows.Forms.OpenFileDialog openFileDialog1;
     private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-    private System.Windows.Forms.SplitContainer split3D_sql;
     private System.Windows.Forms.Ribbon ribbon1;
     private System.Windows.Forms.RibbonTab ribbonTab1;
     private System.Windows.Forms.RibbonPanel panelQuery;
     private System.Windows.Forms.RibbonButton rbtnAddConnection;
     private MaterialSkin.Controls.AdvancedTreeView advancedTreeView1;
     private System.Windows.Forms.ImageList imageList1;
-    private System.Windows.Forms.Panel mainControlsPanel;
     private System.Windows.Forms.Panel SqlContainerPanel;
     private System.Windows.Forms.RibbonButton rbtnRemoveAllQueries;
     private System.Windows.Forms.RibbonButton rbtnAddQuery;
@@ -430,6 +378,7 @@
     private System.Windows.Forms.RibbonPanel panelUI;
     private System.Windows.Forms.RibbonButton rbtnNL;
     private System.Windows.Forms.RibbonButton rbtnEN;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
   }
 }
 

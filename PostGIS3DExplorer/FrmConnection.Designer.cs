@@ -362,7 +362,6 @@
       this.MinimizeBox = false;
       this.Name = "FrmConnection";
       this.ShowInTaskbar = false;
-      this.Sizable = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "PostgreSQL connectie";
       this.Load += new System.EventHandler(this.FrmConnection_Load);
